@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI;
+package com.mycompany.oopjava;
 
 /**
  *
@@ -29,7 +29,7 @@ public class Khachhangdathang extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblMathangsaphet = new javax.swing.JTable();
+        tblDathang = new javax.swing.JTable();
         lblMaquanao = new javax.swing.JLabel();
         txtMaquanao = new javax.swing.JTextField();
         txtTenquanao = new javax.swing.JTextField();
@@ -59,7 +59,7 @@ public class Khachhangdathang extends javax.swing.JFrame {
         btnSoluongdat = new javax.swing.JTextField();
         lblDongiaban1 = new javax.swing.JLabel();
         btnDathang = new javax.swing.JButton();
-        btnXemgiohang1 = new javax.swing.JButton();
+        btnXemdonhang = new javax.swing.JButton();
         btnLammoi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,7 +69,7 @@ public class Khachhangdathang extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Đặt hàng");
 
-        tblMathangsaphet.setModel(new javax.swing.table.DefaultTableModel(
+        tblDathang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -80,7 +80,7 @@ public class Khachhangdathang extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblMathangsaphet);
+        jScrollPane1.setViewportView(tblDathang);
 
         lblMaquanao.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblMaquanao.setText("Mã quần áo:");
@@ -158,7 +158,7 @@ public class Khachhangdathang extends javax.swing.JFrame {
 
         btnDathang.setText("Đặt hàng");
 
-        btnXemgiohang1.setText("Xóa đơn hàng");
+        btnXemdonhang.setText("Xóa đơn hàng");
 
         btnLammoi.setText("Làm mới");
 
@@ -244,7 +244,7 @@ public class Khachhangdathang extends javax.swing.JFrame {
                         .addGap(41, 41, 41)
                         .addComponent(btnXemgiohang)
                         .addGap(39, 39, 39)
-                        .addComponent(btnXemgiohang1)
+                        .addComponent(btnXemdonhang)
                         .addGap(43, 43, 43)
                         .addComponent(btnLammoi)
                         .addGap(44, 44, 44)
@@ -313,7 +313,7 @@ public class Khachhangdathang extends javax.swing.JFrame {
                     .addComponent(btnXemgiohang, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDathang, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnXemgiohang1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnXemdonhang, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLammoi, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24))
         );
@@ -519,8 +519,8 @@ public class Khachhangdathang extends javax.swing.JFrame {
     private javax.swing.JButton btnThemgiohang;
     private javax.swing.JButton btnThoat;
     private javax.swing.JButton btnTimkiem;
+    private javax.swing.JButton btnXemdonhang;
     private javax.swing.JButton btnXemgiohang;
-    private javax.swing.JButton btnXemgiohang1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -536,7 +536,7 @@ public class Khachhangdathang extends javax.swing.JFrame {
     private javax.swing.JLabel lblNoisanxuat;
     private javax.swing.JLabel lblSoluong2;
     private javax.swing.JLabel lblTenquanao;
-    private javax.swing.JTable tblMathangsaphet;
+    private javax.swing.JTable tblDathang;
     private javax.swing.JTextField txtMaquanao;
     private javax.swing.JTextField txtTenquanao;
     // End of variables declaration//GEN-END:variables

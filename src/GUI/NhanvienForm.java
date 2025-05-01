@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI;
+package com.mycompany.oopjava;
 
 /**
  *
@@ -36,7 +36,7 @@ public class NhanvienForm extends javax.swing.JFrame {
         btnDangxuat = new javax.swing.JButton();
         btnXemdondathang = new javax.swing.JButton();
         btnDoimatkhau = new javax.swing.JButton();
-        btnHoadonnhap = new javax.swing.JButton();
+        btnLaphoadonnhap = new javax.swing.JButton();
         btnSanphamsaphet = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -84,7 +84,7 @@ public class NhanvienForm extends javax.swing.JFrame {
 
         btnDoimatkhau.setText("Đổi mật khẩu");
 
-        btnHoadonnhap.setText("Lập hóa đơn");
+        btnLaphoadonnhap.setText("Lập hóa đơn");
 
         btnSanphamsaphet.setText("Sản phẩm sắp hết");
         btnSanphamsaphet.addActionListener(new java.awt.event.ActionListener() {
@@ -113,7 +113,7 @@ public class NhanvienForm extends javax.swing.JFrame {
                             .addComponent(btnSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnXemdondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDoimatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnHoadonnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnLaphoadonnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(sidePanelLayout.createSequentialGroup()
                 .addGap(131, 131, 131)
@@ -147,7 +147,7 @@ public class NhanvienForm extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addComponent(btnXemdondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnHoadonnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnLaphoadonnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDoimatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -305,7 +305,7 @@ public class NhanvienForm extends javax.swing.JFrame {
     private javax.swing.JLabel anh3;
     private javax.swing.JButton btnDangxuat;
     private javax.swing.JButton btnDoimatkhau;
-    private javax.swing.JButton btnHoadonnhap;
+    private javax.swing.JButton btnLaphoadonnhap;
     private javax.swing.JButton btnSanpham;
     private javax.swing.JButton btnSanphambanchay;
     private javax.swing.JButton btnSanphamsaphet;

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI;
+package com.mycompany.oopjava;
 
 /**
  *
@@ -29,7 +29,7 @@ public class Hoadonnhap extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblHoadonban = new javax.swing.JTable();
+        tblHoadonnhap = new javax.swing.JTable();
         lblNhacungcap = new javax.swing.JLabel();
         lblMaquanao = new javax.swing.JLabel();
         lblDongia = new javax.swing.JLabel();
@@ -55,7 +55,7 @@ public class Hoadonnhap extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("DANH SÁCH HÓA ĐƠN NHẬP");
 
-        tblHoadonban.setModel(new javax.swing.table.DefaultTableModel(
+        tblHoadonnhap.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -66,7 +66,7 @@ public class Hoadonnhap extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblHoadonban);
+        jScrollPane1.setViewportView(tblHoadonnhap);
 
         lblNhacungcap.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblNhacungcap.setText("Nhà cung cấp:");
@@ -283,7 +283,7 @@ public class Hoadonnhap extends javax.swing.JFrame {
     private javax.swing.JLabel lblNhacungcap;
     private javax.swing.JLabel lblSohoadonnhap1;
     private javax.swing.JLabel lblSoluongnhap;
-    private javax.swing.JTable tblHoadonban;
+    private javax.swing.JTable tblHoadonnhap;
     private javax.swing.JTextField txtDongia;
     private javax.swing.JTextField txtGiamgia;
     private javax.swing.JTextField txtManhanvien;

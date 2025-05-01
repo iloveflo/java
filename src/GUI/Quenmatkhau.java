@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI;
+package com.mycompany.oopjava;
 
 /**
  *
@@ -30,8 +30,8 @@ public class Quenmatkhau extends javax.swing.JFrame {
         btnQuaylai = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblTendangnhap = new javax.swing.JLabel();
-        txtTendangnhap = new javax.swing.JTextField();
-        btnQuaylai1 = new javax.swing.JButton();
+        txtEmail = new javax.swing.JTextField();
+        btnGuimaOTP = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,16 +45,16 @@ public class Quenmatkhau extends javax.swing.JFrame {
         lblTendangnhap.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblTendangnhap.setText("Email:");
 
-        txtTendangnhap.addActionListener(new java.awt.event.ActionListener() {
+        txtEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTendangnhapActionPerformed(evt);
+                txtEmailActionPerformed(evt);
             }
         });
 
-        btnQuaylai1.setText("GỬI MÃ OTP");
-        btnQuaylai1.addActionListener(new java.awt.event.ActionListener() {
+        btnGuimaOTP.setText("GỬI MÃ OTP");
+        btnGuimaOTP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQuaylai1ActionPerformed(evt);
+                btnGuimaOTPActionPerformed(evt);
             }
         });
 
@@ -74,11 +74,11 @@ public class Quenmatkhau extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(lblTendangnhap)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtTendangnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(6, 6, 6))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(236, 236, 236)
-                        .addComponent(btnQuaylai1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnGuimaOTP, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(184, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -91,9 +91,9 @@ public class Quenmatkhau extends javax.swing.JFrame {
                 .addGap(90, 90, 90)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTendangnhap)
-                    .addComponent(txtTendangnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
-                .addComponent(btnQuaylai1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnGuimaOTP, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(173, Short.MAX_VALUE))
         );
 
@@ -112,13 +112,13 @@ public class Quenmatkhau extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtTendangnhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTendangnhapActionPerformed
+    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTendangnhapActionPerformed
+    }//GEN-LAST:event_txtEmailActionPerformed
 
-    private void btnQuaylai1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuaylai1ActionPerformed
+    private void btnGuimaOTPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuimaOTPActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnQuaylai1ActionPerformed
+    }//GEN-LAST:event_btnGuimaOTPActionPerformed
 
     /**
      * @param args the command line arguments
@@ -156,11 +156,11 @@ public class Quenmatkhau extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGuimaOTP;
     private javax.swing.JButton btnQuaylai;
-    private javax.swing.JButton btnQuaylai1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblTendangnhap;
-    private javax.swing.JTextField txtTendangnhap;
+    private javax.swing.JTextField txtEmail;
     // End of variables declaration//GEN-END:variables
 }
