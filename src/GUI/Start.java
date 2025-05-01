@@ -1,13 +1,14 @@
 
 package GUI;
 
+import BackEnd.*;
+
 public class Start extends javax.swing.JFrame {
 
     public Start() {
         initComponents();
-        
+        AuthService.addLoginEvents(this, btnLogin, cboxRemember, txtPass, txtUser, jButton1,btnQuenmatkhau);
     }
-
  
     private void initComponents() {
 
@@ -36,7 +37,7 @@ public class Start extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
         jLabel1.setText("CỬA HÀNG QUẦN ÁO BDTHD");
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/anhquanao.jpg"))); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/anhquanao.jpg"))); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel8.setText("BDTHD – Tôn vinh phong cách, khẳng định cá tính");
@@ -74,13 +75,13 @@ public class Start extends javax.swing.JFrame {
 
         btnLogin.setText("Đăng nhập");
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/login2.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/login2.png"))); // NOI18N
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/password2.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/password2.png"))); // NOI18N
 
         txtUser.setToolTipText("");
 
-        cboxRemember.setText("Nhớ mật khẩu");
+        cboxRemember.setText("Hiện mật khẩu");
 
         jButton1.setText("Đăng ký");
 

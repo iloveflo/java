@@ -1,6 +1,9 @@
 package BackEnd;
 
 import javax.swing.*;
+
+import GUI.Quenmatkhau;
+
 import java.sql.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -75,7 +78,7 @@ public class AuthService {
             JOptionPane.showMessageDialog(parentFrame, "Lỗi kết nối: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-    public static void addLoginEvents(JFrame parentFrame, JButton btnLogin, JCheckBox cboxRemember, JPasswordField txtPass, JTextField txtUser, JButton btnRegister) {
+    public static void addLoginEvents(JFrame parentFrame, JButton btnLogin, JCheckBox cboxRemember, JPasswordField txtPass, JTextField txtUser, JButton btnRegister, JButton btnQuenmatkhau) {
         btnLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 handleLogin(txtUser.getText(), String.valueOf(txtPass.getPassword()), parentFrame);
@@ -96,6 +99,12 @@ public class AuthService {
             public void actionPerformed(ActionEvent evt) {
                 parentFrame.dispose();
                 new GUI.register().setVisible(true);
+            }
+        });
+        btnQuenmatkhau.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                parentFrame.dispose();
+                new Quenmatkhau().setVisible(true);
             }
         });
     }
