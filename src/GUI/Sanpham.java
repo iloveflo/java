@@ -4,6 +4,22 @@
  */
 package GUI;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.awt.Image;
+import java.io.File;
+import java.math.BigDecimal;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.awt.BorderLayout;
+import BackEnd.*;
 /**
  *
  * @author Neo 16
@@ -15,7 +31,201 @@ public class Sanpham extends javax.swing.JFrame {
      */
     public Sanpham() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                capNhatDangNhapVaThoat();
+            }
+        });
+        doDuLieuSanPham();
+        Sanphamdata.doDuLieuVaoComboBox(boxLoai, "theloai", "TenLoai");
+        Sanphamdata.doDuLieuVaoComboBox(boxChatlieu, "chatlieu", "TenChatLieu");
+        Sanphamdata.doDuLieuVaoComboBox(boxDoituong, "doituong", "TenDoiTuong");
+        Sanphamdata.doDuLieuVaoComboBox(boxKichco, "co", "TenCo");
+        Sanphamdata.doDuLieuVaoComboBox(boxMua, "mua", "TenMua");
+        Sanphamdata.doDuLieuVaoComboBox(boxMau, "mau", "TenMau");
+        Sanphamdata.doDuLieuVaoComboBox(boxNoisanxuat, "noisanxuat", "TenNSX");
+        tblSanpham.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                hienThiChiTietSanPham();
+            }
+        }); 
+        btnThoat.addActionListener(e -> {
+            new Menu().setVisible(true);
+            dispose();
+        });
+        btnThem.addActionListener(e -> {
+            try {
+                int maQuanAo = Integer.parseInt(txtMaquanao.getText().trim());
+                String tenQuanAo = txtTenquanao.getText().trim();
+                BigDecimal donGiaNhap = new BigDecimal(txtDongianhap.getText().trim());
+                BigDecimal donGiaBan = new BigDecimal(txtDongiaban.getText().trim());
+                int soLuong = Integer.parseInt(txtSoluong.getText().trim());
+                String anh = txtAnh.getText().trim();
+        
+                // Lấy mã từ combobox (giả sử combobox chứa Integer)
+                int maLoai = (int) boxLoai.getSelectedItem();
+                int maChatLieu = (int) boxChatlieu.getSelectedItem();
+                int maDoiTuong = (int) boxDoituong.getSelectedItem();
+                int maCo = (int) boxKichco.getSelectedItem();
+                int maMua = (int) boxMua.getSelectedItem();
+                int maMau = (int) boxMau.getSelectedItem();
+                int maNSX = (int) boxNoisanxuat.getSelectedItem();
+        
+                if (tenQuanAo.isEmpty() || anh.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin.");
+                    return;
+                }
+        
+                Sanphamdata dao = new Sanphamdata();
+                if (dao.kiemTraTrungMaQuanAo(maQuanAo)) {
+                    JOptionPane.showMessageDialog(null, "Mã quần áo đã tồn tại!");
+                    return;
+                }
+        
+                boolean thanhCong = dao.themSanPham(maQuanAo, tenQuanAo, maLoai, maCo, maChatLieu,
+                                                     maMau, maDoiTuong, maMua, maNSX,
+                                                     soLuong, anh, donGiaNhap, donGiaBan);
+        
+                if (thanhCong) {
+                    JOptionPane.showMessageDialog(null, "Thêm sản phẩm thành công!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Thêm sản phẩm thất bại.");
+                }
+        
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng định dạng số.");
+            }
+        });               
     }
+    public void hienThiChiTietSanPham() {
+        int row = tblSanpham.getSelectedRow();
+        if (row == -1) return; // không có dòng nào được chọn
+    
+        txtMaquanao.setText(tblSanpham.getValueAt(row, 0).toString());
+        txtTenquanao.setText(tblSanpham.getValueAt(row, 1).toString());
+        boxLoai.setSelectedItem(tblSanpham.getValueAt(row, 2).toString());
+        boxKichco.setSelectedItem(tblSanpham.getValueAt(row, 3).toString());
+        boxChatlieu.setSelectedItem(tblSanpham.getValueAt(row, 4).toString());
+        boxMau.setSelectedItem(tblSanpham.getValueAt(row, 5).toString());
+        boxDoituong.setSelectedItem(tblSanpham.getValueAt(row, 6).toString());
+        boxMua.setSelectedItem(tblSanpham.getValueAt(row, 7).toString());
+        boxNoisanxuat.setSelectedItem(tblSanpham.getValueAt(row, 8).toString());
+        txtDongiaban.setText(tblSanpham.getValueAt(row, 9).toString());
+        txtDongianhap.setText(tblSanpham.getValueAt(row, 10).toString());
+        txtSoluong.setText(tblSanpham.getValueAt(row, 11).toString());
+        txtAnh.setText(tblSanpham.getValueAt(row, 12).toString());
+    
+        // Gọi hàm hiển thị ảnh
+        hienThiAnh(tblSanpham.getValueAt(row, 12).toString());
+    }
+    public void hienThiAnh(String duongDan) {
+        try {
+            // Đảm bảo đường dẫn hợp lệ (kiểm tra xem tệp có tồn tại không)
+            File file = new File(duongDan);
+            if (!file.exists()) {
+                JOptionPane.showMessageDialog(null, "Ảnh không tồn tại tại: " + duongDan);
+                return;
+            }
+    
+            // Tạo đối tượng ImageIcon từ đường dẫn ảnh
+            ImageIcon icon = new ImageIcon(duongDan);
+            // Tải ảnh và thay đổi kích thước phù hợp với JPanel (Anh)
+            Image img = icon.getImage().getScaledInstance(Anh.getWidth(), Anh.getHeight(), Image.SCALE_SMOOTH);
+    
+            // Tạo một JLabel chứa ảnh đã thay đổi kích thước
+            JLabel lbl = new JLabel(new ImageIcon(img));
+    
+            // Xóa hết nội dung cũ của JPanel trước khi thêm ảnh mới
+            Anh.removeAll();
+            Anh.setLayout(new BorderLayout()); // Đảm bảo layout hợp lý
+            Anh.add(lbl, BorderLayout.CENTER); // Thêm JLabel vào giữa JPanel
+    
+            // Cập nhật lại giao diện
+            Anh.revalidate();
+            Anh.repaint();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Không thể hiển thị ảnh: " + duongDan);
+        }
+    }
+    
+
+    public void doDuLieuSanPham() {
+        DefaultTableModel model = new DefaultTableModel(
+            new String[] {
+                "Mã quần áo", "Tên quần áo", "Thể loại", "Cỡ", "Chất liệu", 
+                "Màu", "Đối tượng", "Mùa", "Nơi sản xuất", 
+                "Đơn giá bán", "Đơn giá nhập", "Số lượng", "Ảnh"
+            }, 0
+        );
+        tblSanpham.setModel(model);
+    
+        String sql = """
+            SELECT 
+                sp.MaQuanAo, sp.TenQuanAo, tl.TenLoai, c.TenCo, cl.TenChatLieu,
+                m.TenMau, dt.TenDoiTuong, mu.TenMua, nsx.TenNSX,
+                sp.DonGiaBan, sp.DonGiaNhap, sp.SoLuong, sp.Anh
+            FROM sanpham sp
+            JOIN theloai tl ON sp.MaLoai = tl.MaLoai
+            JOIN co c ON sp.MaCo = c.MaCo
+            JOIN chatlieu cl ON sp.MaChatLieu = cl.MaChatLieu
+            JOIN mau m ON sp.MaMau = m.MaMau
+            JOIN doituong dt ON sp.MaDoiTuong = dt.MaDoiTuong
+            JOIN mua mu ON sp.MaMua = mu.MaMua
+            JOIN noisanxuat nsx ON sp.MaNSX = nsx.MaNSX
+        """;
+    
+        try (Connection conn = ketnoiCSDL.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+    
+            while (rs.next()) {
+                Object[] row = new Object[] {
+                    rs.getInt("MaQuanAo"),
+                    rs.getString("TenQuanAo"),
+                    rs.getString("TenLoai"),
+                    rs.getString("TenCo"),
+                    rs.getString("TenChatLieu"),
+                    rs.getString("TenMau"),
+                    rs.getString("TenDoiTuong"),
+                    rs.getString("TenMua"),
+                    rs.getString("TenNSX"),
+                    rs.getDouble("DonGiaBan"),
+                    rs.getDouble("DonGiaNhap"),
+                    rs.getInt("SoLuong"),
+                    rs.getString("Anh") // Hiện đường dẫn hoặc tên file ảnh
+                };
+                model.addRow(row);
+            }
+    
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi khi tải dữ liệu sản phẩm:\n" + e.getMessage());
+        }
+    }
+
+
+
+    private void capNhatDangNhap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, SessionManager.getMaTaiKhoan());
+            stmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void capNhatDangNhapVaThoat() {
+        capNhatDangNhap();
+        SessionManager.clearSession();
+        System.exit(0);
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,15 +281,14 @@ public class Sanpham extends javax.swing.JFrame {
 
         tblSanpham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Mã quần áo", "Tên quần áo", "Thể loại", "Chất liệu", "Đối tượng",
+                "Kích cỡ", "Màu", "Mùa", "Nơi sản xuất", "Đơn giá bán",
+                "Đơn giá nhập", "Số lượng", "Ảnh"
             }
         ));
+
         jScrollPane1.setViewportView(tblSanpham);
 
         lblMaquanao.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
