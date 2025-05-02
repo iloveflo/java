@@ -4,11 +4,19 @@
  */
 package GUI;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.List;
-
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-import BackEnd.NhanvienData;
+
+import BackEnd.*;
 
 /**
  *
@@ -21,6 +29,13 @@ public class Nhanvien extends javax.swing.JFrame {
      */
     public Nhanvien() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                capNhatDangNhapVaThoat();
+            }
+        });
         loadNhanvienTable();
         tblNhanvien.getSelectionModel().addListSelectionListener(e -> {
             int row = tblNhanvien.getSelectedRow();
@@ -42,6 +57,85 @@ public class Nhanvien extends javax.swing.JFrame {
         btnLammoi.addActionListener(e -> {
             loadNhanvienTable();
             clearTextFields();
+        });
+        btnThem.addActionListener(e -> {
+            NhanvienData.themNhanVien(
+                txtManhanvien.getText(),
+                txtHoten.getText(),
+                boxGioitinh.getSelectedItem().toString(),
+                txtNgaysinh.getText(),
+                txtSDT.getText(),
+                txtDiachi.getText(),
+                txtEmail.getText(),
+                txtCongviec.getText()
+            );
+        });
+        btnXoa.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                int selectedRow = tblNhanvien.getSelectedRow();
+                if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên cần xóa!");
+                    return;
+                }
+        
+                String maNV = tblNhanvien.getValueAt(selectedRow, 0).toString();
+        
+                int confirm = JOptionPane.showConfirmDialog(null,
+                        "Bạn có chắc muốn xóa nhân viên mã " + maNV + " không?",
+                        "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+        
+                if (confirm == JOptionPane.YES_OPTION) {
+                    boolean result = NhanvienData.xoaNhanVien(maNV);
+                    if (result) {
+                        JOptionPane.showMessageDialog(null, "Xóa nhân viên thành công!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Xóa nhân viên thất bại!");
+                    }
+                }
+            }
+        });
+        btnTimkiem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String maNV = txtManhanvien.getText().trim();
+        
+                if (maNV.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập mã nhân viên cần tìm!");
+                    return;
+                }
+        
+                List<Object[]> ketQua = NhanvienData.timKiemNhanVienTheoMa(maNV);
+                DefaultTableModel model = (DefaultTableModel) tblNhanvien.getModel();
+                model.setRowCount(0); // Xóa bảng cũ
+        
+                if (ketQua.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy nhân viên với mã: " + maNV);
+                } else {
+                    for (Object[] row : ketQua) {
+                        model.addRow(row);
+                    }
+                }
+            }
+        });
+        
+        btnCapnhat.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                String maNV = txtManhanvien.getText().trim();
+                String hoTen = txtHoten.getText().trim();
+                String gioiTinh = boxGioitinh.getSelectedItem().toString();
+                String ngaySinh = txtNgaysinh.getText().trim();
+                String sdt = txtSDT.getText().trim();
+                String diaChi = txtDiachi.getText().trim();
+                String email = txtEmail.getText().trim();
+                String maCongViec = txtCongviec.getText().trim();
+        
+                boolean result = NhanvienData.capNhatNhanVien(maNV, hoTen, gioiTinh, ngaySinh, sdt, diaChi, email, maCongViec);
+                if (result) {
+                    JOptionPane.showMessageDialog(null, "Cập nhật nhân viên thành công!");
+                    // Load lại bảng nếu cần
+                } else {
+                    JOptionPane.showMessageDialog(null, "Cập nhật nhân viên thất bại!");
+                }
+            }
         });        
     }
     private void clearTextFields() {
@@ -72,7 +166,22 @@ public class Nhanvien extends javax.swing.JFrame {
             });
         }
     }
+     private void capNhatDangNhap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, SessionManager.getMaTaiKhoan());
+            stmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
+    private void capNhatDangNhapVaThoat() {
+        capNhatDangNhap();
+        SessionManager.clearSession();
+        System.exit(0);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
