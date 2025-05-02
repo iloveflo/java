@@ -4,6 +4,18 @@
  */
 package GUI;
 
+import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import BackEnd.*;
+
 /**
  *
  * @author Neo 16
@@ -15,6 +27,134 @@ public class Khachhang extends javax.swing.JFrame {
      */
     public Khachhang() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                capNhatDangNhapVaThoat();
+            }
+        });
+        loadKhachHangTable();
+        handleRowClick();
+        btnThoat.addActionListener(e -> {
+            new Menu().setVisible(true);
+            dispose();
+        });
+        btnXoa.addActionListener(e -> {
+            String maKH = txtMakhachhang.getText().trim();
+            if (maKH.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã khách hàng để xóa.");
+                return;
+            }
+
+            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa khách hàng và tài khoản này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (KhachhangData.deleteKhachHangAndTaiKhoan(maKH)) {
+                    JOptionPane.showMessageDialog(this, "Xóa thành công.");
+                    loadKhachHangTable();
+                    clearTextFields();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Xóa thất bại.");
+                }
+            }
+        });
+        btnTimkiem.addActionListener(e -> {
+            String maKH = txtMakhachhang.getText().trim();
+            if (maKH.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nhập mã khách hàng để tìm.");
+                return;
+            }
+        
+            KhachhangData.Khachhang kh = KhachhangData.getKhachHangByID(maKH);
+            if (kh != null) {
+                txtTenkhachhang.setText(kh.getTenKhach());
+                txtDiachi.setText(kh.getDiaChi());
+                txtSDT.setText(kh.getSoDienThoai());
+                txtEmail.setText(kh.getEmail());
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng.");
+            }
+        });
+        btnLammoi.addActionListener(e -> {
+            loadKhachHangTable();
+            clearTextFields();
+        });
+        
+        btnCapnhat.addActionListener(e -> {
+            String maKH = txtMakhachhang.getText().trim();
+            String ten = txtTenkhachhang.getText().trim();
+            String diachi = txtDiachi.getText().trim();
+            String sdt = txtSDT.getText().trim();
+            String email = txtEmail.getText().trim();
+        
+            if (maKH.isEmpty() || ten.isEmpty() || diachi.isEmpty() || sdt.isEmpty() || email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin.");
+                return;
+            }
+        
+            KhachhangData.Khachhang kh = new KhachhangData.Khachhang(maKH, ten, diachi, sdt, email);
+            if (KhachhangData.updateKhachHang(kh)) {
+                JOptionPane.showMessageDialog(this, "Cập nhật thành công.");
+                loadKhachHangTable();
+            } else {
+                JOptionPane.showMessageDialog(this, "Cập nhật thất bại.");
+            }
+        });        
+    }
+    private void clearTextFields() {
+        txtMakhachhang.setText("");
+        txtTenkhachhang.setText("");
+        txtDiachi.setText("");
+        txtSDT.setText("");
+        txtEmail.setText("");
+    }    
+    private void loadKhachHangTable() {
+        DefaultTableModel model = (DefaultTableModel) tblKhachhang.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+
+                List<KhachhangData.Khachhang> list = KhachhangData.getAllKhachHang();
+            for (KhachhangData.Khachhang kh : list) {
+                model.addRow(new Object[]{
+                    kh.getMaKhachHang(),
+                    kh.getTenKhach(),
+                    kh.getDiaChi(),
+                    kh.getSoDienThoai(),
+                    kh.getEmail()
+                });
+            }
+
+    }
+    private void handleRowClick() {
+        tblKhachhang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = tblKhachhang.getSelectedRow();
+                if (row >= 0) {
+                    txtMakhachhang.setText(tblKhachhang.getValueAt(row, 0).toString());
+                    txtTenkhachhang.setText(tblKhachhang.getValueAt(row, 1).toString());
+                    txtDiachi.setText(tblKhachhang.getValueAt(row, 2).toString());
+                    txtSDT.setText(tblKhachhang.getValueAt(row, 3).toString());
+                    txtEmail.setText(tblKhachhang.getValueAt(row, 4).toString());
+                }
+            }
+        });
+    }
+
+
+    private void capNhatDangNhap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, SessionManager.getMaTaiKhoan());
+            stmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void capNhatDangNhapVaThoat() {
+        capNhatDangNhap();
+        SessionManager.clearSession();
+        System.exit(0);
     }
 
     /**
@@ -54,16 +194,12 @@ public class Khachhang extends javax.swing.JFrame {
         jLabel1.setText("DANH SÁCH KHÁCH HÀNG");
 
         tblKhachhang.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+    new Object [][] {},
+    new String [] {
+        "Mã KH", "Tên KH", "Địa chỉ", "SĐT", "Email"
+    }
+));
+
         jScrollPane1.setViewportView(tblKhachhang);
 
         lblMakhachhang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N

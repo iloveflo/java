@@ -172,11 +172,11 @@ public class NhanvienForm extends javax.swing.JFrame {
         txtGiare.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         txtGiare.setText("GIÁ RẺ");
 
-        anh1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final1.png"))); // NOI18N
+        anh1.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final1.png"))); // NOI18N
 
-        anh2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final2.png"))); // NOI18N
+        anh2.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final2.png"))); // NOI18N
 
-        anh3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final3.png"))); // NOI18N
+        anh3.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final3.png"))); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 51, 51));

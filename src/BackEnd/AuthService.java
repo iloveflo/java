@@ -39,7 +39,7 @@ public class AuthService {
                     JOptionPane.showMessageDialog(parentFrame, "Đăng nhập thành công\nMã: " + maTK + "\nLoại: " + loaiTK);
 
                     parentFrame.dispose();
-                    /*switch (loaiTK) {
+                    switch (loaiTK) {
                         case "Admin":
                             rs.close(); // Đóng ResultSet
                             String updateQuery = "UPDATE TaiKhoan SET DangNhap = 1 WHERE MaTaiKhoan = ?";
@@ -47,7 +47,7 @@ public class AuthService {
                                 updateStmt.setString(1, SessionManager.getMaTaiKhoan());
                                 updateStmt.executeUpdate();
                             }
-                            new ui.AdminForm().setVisible(true);
+                            new GUI.Menu().setVisible(true);
                             break;
                         case "KhachHang":
                             rs.close(); // Đóng ResultSet
@@ -56,7 +56,7 @@ public class AuthService {
                                 updateStmt.setString(1, SessionManager.getMaTaiKhoan());
                                 updateStmt.executeUpdate();
                             }
-                            new ui.KhachHangForm().setVisible(true);
+                            new GUI.KhachhangForm().setVisible(true);
                             break;
                         case "NhanVien":
                             rs.close(); // Đóng ResultSet
@@ -65,11 +65,11 @@ public class AuthService {
                                 updateStmt.setString(1, SessionManager.getMaTaiKhoan());
                                 updateStmt.executeUpdate();
                             }
-                            new ui.NhanVienForm().setVisible(true);
+                            new GUI.NhanvienForm().setVisible(true);
                             break;
                         default:
                             JOptionPane.showMessageDialog(parentFrame, "Loại tài khoản không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    }*/
+                    }
                 } else {
                     JOptionPane.showMessageDialog(parentFrame, "Sai tài khoản hoặc mật khẩu", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }

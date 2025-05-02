@@ -4,6 +4,12 @@
  */
 package GUI;
 
+import java.util.List;
+
+import javax.swing.table.DefaultTableModel;
+
+import BackEnd.NhanvienData;
+
 /**
  *
  * @author Neo 16
@@ -15,6 +21,56 @@ public class Nhanvien extends javax.swing.JFrame {
      */
     public Nhanvien() {
         initComponents();
+        loadNhanvienTable();
+        tblNhanvien.getSelectionModel().addListSelectionListener(e -> {
+            int row = tblNhanvien.getSelectedRow();
+            if (row >= 0) {
+                txtManhanvien.setText(tblNhanvien.getValueAt(row, 0).toString());
+                txtHoten.setText(tblNhanvien.getValueAt(row, 1).toString());
+                boxGioitinh.setSelectedItem(tblNhanvien.getValueAt(row, 2).toString());
+                txtNgaysinh.setText(tblNhanvien.getValueAt(row, 3).toString());
+                txtSDT.setText(tblNhanvien.getValueAt(row, 4).toString());
+                txtDiachi.setText(tblNhanvien.getValueAt(row, 5).toString());
+                txtEmail.setText(tblNhanvien.getValueAt(row, 6).toString());
+                txtCongviec.setText(tblNhanvien.getValueAt(row, 7).toString());
+            }
+        });
+        btnThoat.addActionListener(e -> {
+            new Menu().setVisible(true);
+            dispose();
+        });
+        btnLammoi.addActionListener(e -> {
+            loadNhanvienTable();
+            clearTextFields();
+        });        
+    }
+    private void clearTextFields() {
+        txtManhanvien.setText("");
+        txtHoten.setText("");
+        txtNgaysinh.setText("");
+        txtSDT.setText("");
+        txtDiachi.setText("");
+        txtEmail.setText("");
+        txtCongviec.setText(""); // nếu dùng TextField
+        boxGioitinh.setSelectedIndex(0); // hoặc set lại về "Nam"
+    } 
+    private void loadNhanvienTable() {
+        DefaultTableModel model = (DefaultTableModel) tblNhanvien.getModel();
+        model.setRowCount(0); // clear
+        List<NhanvienData.Nhanvien> list = NhanvienData.getAllNhanVien();
+
+        for (NhanvienData.Nhanvien nv : list) {
+            model.addRow(new Object[]{
+                nv.getMaNhanVien(),
+                nv.getTenNhanVien(),
+                nv.getGioiTinh(),
+                nv.getNgaySinh(),
+                nv.getSoDienThoai(),
+                nv.getDiaChi(),
+                nv.getEmail(),
+                nv.getTenCongViec()
+            });
+        }
     }
 
     /**
@@ -61,16 +117,12 @@ public class Nhanvien extends javax.swing.JFrame {
         jLabel1.setText("DANH SÁCH NHÂN VIÊN");
 
         tblNhanvien.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+            new Object[][] {}, // không có dữ liệu sẵn
+            new String[] {
+                "Mã NV", "Họ tên", "Giới tính", "Ngày sinh", "SĐT", "Địa chỉ", "Email", "Công việc"
             }
         ));
+        
         jScrollPane1.setViewportView(tblNhanvien);
 
         lblManhanvien.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -101,7 +153,7 @@ public class Nhanvien extends javax.swing.JFrame {
         lblSDT.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblSDT.setText("Số điện thoại:");
 
-        boxGioitinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxGioitinh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nam", "Nữ", "Khác" }));
 
         lblGioitinh.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblGioitinh.setText("Giới tính:");

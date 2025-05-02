@@ -159,11 +159,11 @@ public class KhachhangForm extends javax.swing.JFrame {
         txtGiare.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         txtGiare.setText("GIÁ RẺ");
 
-        anh1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final1.png"))); // NOI18N
+        anh1.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final1.png"))); // NOI18N
 
-        anh2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final2.png"))); // NOI18N
+        anh2.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final2.png"))); // NOI18N
 
-        anh3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final3.png"))); // NOI18N
+        anh3.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final3.png"))); // NOI18N
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);

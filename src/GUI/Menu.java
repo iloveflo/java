@@ -4,6 +4,13 @@
  */
 package GUI;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import javax.swing.JFrame;
+import BackEnd.*;
+
 /**
  *
  * @author Neo 16
@@ -15,6 +22,72 @@ public class Menu extends javax.swing.JFrame {
      */
     public Menu() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                capNhatDangNhapVaThoat();
+            }
+        });
+
+        // Xử lý các nút
+        btnDangxuat.addActionListener(e -> {
+            capNhatDangNhap();
+            SessionManager.clearSession();
+            new Start().setVisible(true);
+            dispose();
+        });
+
+        /*btnDoimatkhau.addActionListener(e -> {
+            capNhatDangNhap();
+            SessionManager.clearSession();
+            new DoiMatKhau().setVisible(true);
+            dispose();
+        });*/
+
+        btnHoadonmuaban.addActionListener(e -> {
+            new Hoadonban().setVisible(true);
+            dispose();
+        });
+
+        btnHoadonnhap.addActionListener(e -> {
+            new Hoadonnhap().setVisible(true);
+            dispose();
+        });
+
+        btnKhachhang.addActionListener(e -> {
+            new Khachhang().setVisible(true);
+            dispose();
+        });
+
+        btnSanpham.addActionListener(e -> {
+            new Sanpham().setVisible(true);
+            dispose();
+        });
+
+        btnNhanvien.addActionListener(e -> {
+            new Nhanvien().setVisible(true);
+            dispose();
+        });
+
+        // Các nút khác (tùy bạn muốn thêm)
+    }
+
+    private void capNhatDangNhap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, SessionManager.getMaTaiKhoan());
+            stmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void capNhatDangNhapVaThoat() {
+        capNhatDangNhap();
+        SessionManager.clearSession();
+        System.exit(0);
     }
 
     /**
@@ -172,11 +245,11 @@ public class Menu extends javax.swing.JFrame {
         txtGiare.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         txtGiare.setText("GIÁ RẺ");
 
-        anh1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final1.png"))); // NOI18N
+        anh1.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final1.png"))); // NOI18N
 
-        anh2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final2.png"))); // NOI18N
+        anh2.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final2.png"))); // NOI18N
 
-        anh3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final3.png"))); // NOI18N
+        anh3.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final3.png"))); // NOI18N
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
