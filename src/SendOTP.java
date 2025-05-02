@@ -20,7 +20,7 @@ public class SendOTP {
     // Hàm gửi email chứa OTP
     public static void sendEmail(String toEmail, String otp) {
         final String fromEmail = "binha10k56@gmail.com"; // Thay bằng email của bạn
-        final String password = "eadb mfdp bgdc qtdt";     // Dùng App Password của Gmail
+        final String password = "";     // Dùng App Password của Gmail
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");

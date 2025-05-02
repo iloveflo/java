@@ -4,6 +4,8 @@
  */
 package GUI;
 
+import BackEnd.OTPService;
+
 /**
  *
  * @author Neo 16
@@ -13,10 +15,26 @@ public class OTP extends javax.swing.JFrame {
     /**
      * Creates new form Quenmatkhau
      */
-    public OTP() {
+    public OTP(String tenDangNhap, String otp) {
         initComponents();
+        OTPService.setData(tenDangNhap, otp);
+    
+        // Gắn sự kiện cho nút Xác thực
+        btnXacthuc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                String maNhap = txtOTP.getText().trim();
+                OTPService.xuLyXacThuc(maNhap, (javax.swing.JFrame) javax.swing.SwingUtilities.getWindowAncestor(txtOTP));
+            }
+        });
+    
+        // Gắn sự kiện cho nút Quay lại
+        btnQuaylai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OTPService.xuLyQuayLai((javax.swing.JFrame) javax.swing.SwingUtilities.getWindowAncestor(txtOTP));
+            }
+        });
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -151,11 +169,12 @@ public class OTP extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new OTP().setVisible(true);
+                String tenDangNhap = "";
+                String otp = "";
+                new OTP(tenDangNhap,otp).setVisible(true);
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnQuaylai;
     private javax.swing.JButton btnXacthuc;

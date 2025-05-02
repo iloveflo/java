@@ -4,6 +4,8 @@
  */
 package GUI;
 
+import BackEnd.QuenMatKhauService;
+
 /**
  *
  * @author Neo 16
@@ -13,9 +15,24 @@ public class Quenmatkhau extends javax.swing.JFrame {
     /**
      * Creates new form Quenmatkhau
      */
-    public Quenmatkhau() {
-        initComponents();
-    }
+   public Quenmatkhau() {
+    initComponents();
+
+    // Nút Gửi mã OTP
+    btnGuimaOTP.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            String tenDangNhap = txtUsername.getText().trim();
+            QuenMatKhauService.xuLyGuiMaOTP(tenDangNhap, (javax.swing.JFrame) javax.swing.SwingUtilities.getWindowAncestor(txtUsername));
+        }
+    });
+
+    // Nút Quay lại
+    btnQuaylai.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            QuenMatKhauService.xuLyQuayLai((javax.swing.JFrame) javax.swing.SwingUtilities.getWindowAncestor(txtUsername));
+        }
+    });
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
