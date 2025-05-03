@@ -4,6 +4,13 @@
  */
 package GUI;
 
+import javax.swing.JFrame;
+import BackEnd.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 /**
  *
  * @author Neo 16
@@ -15,6 +22,41 @@ public class Thongke extends javax.swing.JFrame {
      */
     public Thongke() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                capNhatDangNhapVaThoat();
+            }
+        });
+        btnThoat.addActionListener(e -> {
+            new Menu().setVisible(true);
+            dispose();
+        });
+        btnMathangbanchay.addActionListener(e -> {
+            new Mathangbanchay().setVisible(true);
+            dispose();
+        });
+        btnMathangsaphet.addActionListener(e -> {
+            new Mathangsaphet().setVisible(true);
+            dispose();
+        });
+    }
+    private void capNhatDangNhap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, SessionManager.getMaTaiKhoan());
+            stmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void capNhatDangNhapVaThoat() {
+        capNhatDangNhap();
+        SessionManager.clearSession();
+        System.exit(0);
     }
 
     /**

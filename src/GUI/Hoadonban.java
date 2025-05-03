@@ -4,6 +4,17 @@
  */
 package GUI;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import BackEnd.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author Neo 16
@@ -15,6 +26,67 @@ public class Hoadonban extends javax.swing.JFrame {
      */
     public Hoadonban() {
         initComponents();
+        loadHoaDonBanToTable();
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                capNhatDangNhapVaThoat();
+            }
+        });
+        btnThoat.addActionListener(e -> {
+            new Menu().setVisible(true);
+            dispose();
+        });
+        btnXuathoadon.addActionListener(e -> {
+            String soHoaDon = txtSohoadonban.getText().trim();
+            HoaDonBanService.xuatHoaDon(soHoaDon);
+        });              
+    }
+    private void capNhatDangNhap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, SessionManager.getMaTaiKhoan());
+            stmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void capNhatDangNhapVaThoat() {
+        capNhatDangNhap();
+        SessionManager.clearSession();
+        System.exit(0);
+    }
+    public void loadHoaDonBanToTable() {
+        DefaultTableModel model = (DefaultTableModel) tblHoadonban.getModel();
+        model.setRowCount(0); // xóa dữ liệu cũ
+
+        String sql = "SELECT hdb.SoHoaDonBan, ct.MaQuanAo, hdb.MaKhachHang, hdb.MaNhanVien, ct.SoLuong, hdb.NgayBan, ct.ThanhTien " +
+                    "FROM hoadonban hdb " +
+                    "JOIN chitiethoadonban ct ON hdb.SoHoaDonBan = ct.SoHoaDonBan";
+
+        try (Connection conn = ketnoiCSDL.getConnection();
+            PreparedStatement pst = conn.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getInt("SoHoaDonBan"),
+                    rs.getInt("MaQuanAo"),
+                    rs.getString("MaKhachHang"),
+                    rs.getInt("MaNhanVien"),
+                    rs.getInt("SoLuong"),
+                    rs.getDate("NgayBan"),
+                    rs.getDouble("ThanhTien")
+                };
+                model.addRow(row);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Lỗi khi tải dữ liệu hóa đơn: " + e.getMessage());
+        }
     }
 
     /**
@@ -54,16 +126,12 @@ public class Hoadonban extends javax.swing.JFrame {
         jLabel1.setText("DANH SÁCH HÓA ĐƠN BÁN");
 
         tblHoadonban.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
+            new Object [][] {}, // ban đầu rỗng, bạn sẽ đổ dữ liệu sau
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Số HĐ Bán", "Mã Quần Áo", "Mã KH", "Mã NV", "Số Lượng", "Ngày Bán", "Thành Tiền"
             }
         ));
+
         jScrollPane1.setViewportView(tblHoadonban);
 
         lblMakhachhang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
