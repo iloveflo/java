@@ -3,10 +3,7 @@ package BackEnd;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
-import BackEnd.ketnoiCSDL;
 
 public class NhanvienData {
     // DTO
