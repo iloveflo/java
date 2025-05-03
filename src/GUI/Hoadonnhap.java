@@ -4,6 +4,18 @@
  */
 package GUI;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import BackEnd.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+
 /**
  *
  * @author Neo 16
@@ -15,6 +27,137 @@ public class Hoadonnhap extends javax.swing.JFrame {
      */
     public Hoadonnhap() {
         initComponents();
+        loadNhaCungCap();
+        loadHoaDonNhapData();
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                capNhatDangNhapVaThoat();
+            }
+        });
+        btnThoat.addActionListener(e -> {
+            new Menu().setVisible(true);
+            dispose();
+        });
+        tblHoadonnhap.getSelectionModel().addListSelectionListener(e -> {
+            int selectedRow = tblHoadonnhap.getSelectedRow();
+            if (!e.getValueIsAdjusting() && selectedRow >= 0) {
+                Object soHD = tblHoadonnhap.getValueAt(selectedRow, 0);
+                txtSohoadonnhap.setText(soHD != null ? soHD.toString() : "");
+        
+                Object maNV = tblHoadonnhap.getValueAt(selectedRow, 1);
+                txtManhanvien.setText(maNV != null ? maNV.toString() : "");
+        
+                Object tenNCC = tblHoadonnhap.getValueAt(selectedRow, 2);
+                if (tenNCC != null && boxNhacungcap.getItemCount() > 0) {
+                    boxNhacungcap.setSelectedItem(tenNCC.toString());
+                } else {
+                    boxNhacungcap.setSelectedIndex(-1);
+                }
+        
+                Object maQA = tblHoadonnhap.getValueAt(selectedRow, 3);
+                txtMaquanao.setText(maQA != null ? maQA.toString() : "");
+        
+                Object sl = tblHoadonnhap.getValueAt(selectedRow, 4);
+                txtSoluongnhap.setText(sl != null ? sl.toString() : "");
+        
+                Object dongia = tblHoadonnhap.getValueAt(selectedRow, 5);
+                txtDongia.setText(dongia != null ? dongia.toString() : "");
+        
+                Object giamgia = tblHoadonnhap.getValueAt(selectedRow, 6);
+                txtGiamgia.setText(giamgia != null ? giamgia.toString() : "");
+            }
+        });
+        btnLaphoadon.addActionListener(e -> {
+            int maQuanAo = Integer.parseInt(txtMaquanao.getText());
+            int maNhanVien = Integer.parseInt(txtManhanvien.getText());
+            int soLuong = Integer.parseInt(txtSoluongnhap.getText());
+            double donGia = Double.parseDouble(txtDongia.getText());
+            double giamGia = Double.parseDouble(txtGiamgia.getText());
+            String tenNCC = boxNhacungcap.getSelectedItem().toString();
+        
+            boolean result = HoaDonNhapService.lapHoaDonNhap(maQuanAo, maNhanVien, soLuong, donGia, giamGia, tenNCC);
+            if (result) {
+                JOptionPane.showMessageDialog(null, "Lập hóa đơn thành công!");
+                loadHoaDonNhapData();
+            }
+        });
+        btnTimkiem.addActionListener(e -> {
+            String soHoaDon = txtSohoadonnhap.getText();
+            String tenNCC = boxNhacungcap.getSelectedItem().toString();
+            
+            // Gọi hàm tìm kiếm từ HoaDonNhapDAO và cập nhật dữ liệu lên bảng
+            DefaultTableModel model = HoaDonNhapService.timKiemHoaDonNhap(soHoaDon, tenNCC);
+            tblHoadonnhap.setModel(model);
+        });               
+    }
+    private void capNhatDangNhap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, SessionManager.getMaTaiKhoan());
+            stmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    private void capNhatDangNhapVaThoat() {
+        capNhatDangNhap();
+        SessionManager.clearSession();
+        System.exit(0);
+    }
+    private void loadNhaCungCap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String query = "SELECT MaNCC, TenNCC FROM NhaCungCap";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            boxNhacungcap.removeAllItems(); // Xóa các mục cũ nếu có
+
+            while (rs.next()) {
+                String tenNCC = rs.getString("TenNCC");
+                boxNhacungcap.addItem(tenNCC);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Lỗi tải nhà cung cấp: " + e.getMessage());
+        }
+    }
+    private void loadHoaDonNhapData() {
+        DefaultTableModel model = (DefaultTableModel) tblHoadonnhap.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+
+        String query = """
+            SELECT hd.SoHoaDonNhap, hd.MaNhanVien, ncc.TenNCC, ct.MaQuanAo, 
+                ct.SoLuong, ct.DonGia, ct.GiamGia, 
+                ct.SoLuong * ct.DonGia * (1 - ct.GiamGia / 100) AS ThanhTien
+            FROM HoaDonNhap hd
+            JOIN NhaCungCap ncc ON hd.MaNCC = ncc.MaNCC
+            JOIN ChiTietHoaDonNhap ct ON hd.SoHoaDonNhap = ct.SoHoaDonNhap
+        """;
+
+        try (Connection conn = ketnoiCSDL.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getString("SoHoaDonNhap"),
+                    rs.getString("MaNhanVien"),
+                    rs.getString("TenNCC"),
+                    rs.getString("MaQuanAo"),
+                    rs.getInt("SoLuong"),
+                    rs.getDouble("DonGia"),
+                    rs.getFloat("GiamGia"),
+                    rs.getDouble("ThanhTien")
+                };
+                model.addRow(row);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Lỗi tải dữ liệu hóa đơn nhập: " + e.getMessage());
+        }
     }
 
     /**
@@ -40,7 +183,7 @@ public class Hoadonnhap extends javax.swing.JFrame {
         txtGiamgia = new javax.swing.JTextField();
         txtSoluongnhap = new javax.swing.JTextField();
         txtSohoadonnhap = new javax.swing.JTextField();
-        btnXuathoadon = new javax.swing.JButton();
+        btnLaphoadon = new javax.swing.JButton();
         btnTimkiem = new javax.swing.JButton();
         btnThoat = new javax.swing.JButton();
         txtManhanvien = new javax.swing.JTextField();
@@ -57,15 +200,14 @@ public class Hoadonnhap extends javax.swing.JFrame {
 
         tblHoadonnhap.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                // Có thể để trống hoặc thêm dòng mẫu nếu cần
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Số hóa đơn nhập", "Mã nhân viên", "Tên nhà cung cấp", "Mã quần áo",
+                "Số lượng", "Đơn giá", "Giảm giá", "Thành tiền"
             }
         ));
+
         jScrollPane1.setViewportView(tblHoadonnhap);
 
         lblNhacungcap.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -83,8 +225,8 @@ public class Hoadonnhap extends javax.swing.JFrame {
         lblSoluongnhap.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblSoluongnhap.setText("Số lượng nhập:");
 
-        btnXuathoadon.setText("Xuất hóa đơn");
-        btnXuathoadon.addActionListener(new java.awt.event.ActionListener() {
+        btnLaphoadon.setText("Lập hóa đơn");
+        btnLaphoadon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXuathoadonActionPerformed(evt);
             }
@@ -108,7 +250,7 @@ public class Hoadonnhap extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(407, 407, 407)
-                .addComponent(btnXuathoadon, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnLaphoadon, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(126, 126, 126)
                 .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(394, Short.MAX_VALUE))
@@ -200,7 +342,7 @@ public class Hoadonnhap extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnXuathoadon, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnLaphoadon, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(51, 51, 51))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -272,7 +414,7 @@ public class Hoadonnhap extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> boxNhacungcap;
     private javax.swing.JButton btnThoat;
     private javax.swing.JButton btnTimkiem;
-    private javax.swing.JButton btnXuathoadon;
+    private javax.swing.JButton btnLaphoadon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

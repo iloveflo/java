@@ -41,7 +41,67 @@ public class Hoadonban extends javax.swing.JFrame {
         btnXuathoadon.addActionListener(e -> {
             String soHoaDon = txtSohoadonban.getText().trim();
             HoaDonBanService.xuatHoaDon(soHoaDon);
-        });              
+        });
+        // Thiết lập sự kiện cho JTable khi click vào một dòng
+        // Thiết lập sự kiện cho JTable khi click vào một dòng
+        tblHoadonban.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                // Lấy chỉ số dòng được chọn
+                int rowIndex = tblHoadonban.getSelectedRow();
+
+                if (rowIndex >= 0) {
+                    // Đổ dữ liệu vào các TextField từ các cột trong dòng được chọn
+                    txtSohoadonban.setText(tblHoadonban.getValueAt(rowIndex, 0).toString()); // Số Hóa Đơn Bán
+                    txtMaquanao.setText(tblHoadonban.getValueAt(rowIndex, 1).toString()); // Mã Quần Áo
+                    txtMakhachhang.setText(tblHoadonban.getValueAt(rowIndex, 2).toString()); // Mã Khách Hàng
+                    txtManhanvien.setText(tblHoadonban.getValueAt(rowIndex, 3).toString()); // Mã Nhân Viên
+                    txtSoluongban.setText(tblHoadonban.getValueAt(rowIndex, 4).toString()); // Số Lượng Bán
+
+                    // Lấy Mã Quần Áo
+                    String maQuanAo = tblHoadonban.getValueAt(rowIndex, 1).toString();
+
+                    // Truy vấn để lấy Tên Quần Áo từ bảng SanPham
+                    String tenQuanAo =getTenQuanAoFromMaQuanAo(maQuanAo);
+                    txtTenquanao.setText(tenQuanAo); // Đổ tên quần áo vào TextField
+                }
+            }
+        });     
+    }
+    public String getTenQuanAoFromMaQuanAo(String maQuanAo) {
+        String tenQuanAo = "";
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            // Mở kết nối
+            connection = ketnoiCSDL.getConnection();
+
+            // Câu lệnh SQL để lấy tên quần áo từ MaQuanAo
+            String query = "SELECT TenQuanAo FROM SanPham WHERE MaQuanAo = ?";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, maQuanAo);
+
+            // Thực thi truy vấn
+            resultSet = statement.executeQuery();
+
+            // Nếu có kết quả, lấy tên quần áo
+            if (resultSet.next()) {
+                tenQuanAo = resultSet.getString("TenQuanAo");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý lỗi nếu có
+        } finally {
+            // Đóng kết nối và các đối tượng liên quan
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return tenQuanAo;
     }
     private void capNhatDangNhap() {
         try (Connection conn = ketnoiCSDL.getConnection()) {
