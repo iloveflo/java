@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import BackEnd.*;
+
 /**
  *
  * @author Neo 16
@@ -56,48 +57,87 @@ public class Sanpham extends javax.swing.JFrame {
             dispose();
         });
         btnThem.addActionListener(e -> {
+            String tenQuanAo = txtTenquanao.getText();
+            String maQuanAo = txtMaquanao.getText();
+            String donGiaNhap = txtDongianhap.getText();
+            String donGiaBan = txtDongiaban.getText();
+            String soLuong = txtSoluong.getText();
+            String anh = txtAnh.getText();
+        
+            // Call the backend method to add the product
+            boolean result = Sanphamdata.themSanPham(tenQuanAo, maQuanAo, donGiaNhap, donGiaBan, soLuong, anh, 
+                                                     boxLoai, boxChatlieu, boxDoituong, boxKichco, boxMua, boxMau, boxNoisanxuat);
+            if (result) {
+                doDuLieuSanPham();
+            }
+        });
+        btnXoa.addActionListener(e -> {
+            String maQuanAo = txtMaquanao.getText().trim();
+        
+            if (maQuanAo.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập mã quần áo cần xóa!");
+                return;
+            }
+        
+            // Hộp thoại xác nhận
+            int confirm = JOptionPane.showConfirmDialog(null,
+                "Bạn có chắc chắn muốn xóa sản phẩm có mã: " + maQuanAo + "?",
+                "Xác nhận xóa",
+                JOptionPane.YES_NO_OPTION);
+        
+            // Nếu người dùng chọn YES thì tiến hành xóa
+            if (confirm == JOptionPane.YES_OPTION) {
+                boolean xoaThanhCong = Sanphamdata.xoaSanPham(maQuanAo);
+        
+                if (xoaThanhCong) {
+                    doDuLieuSanPham();
+                }
+            }
+        });
+        btnCapnhat.addActionListener(e -> {
+            String maQuanAo = txtMaquanao.getText().trim();
+            String tenQuanAo = txtTenquanao.getText().trim();
+            String soLuongStr = txtSoluong.getText().trim();
+            String donGiaNhapStr = txtDongianhap.getText().trim();
+            String donGiaBanStr = txtDongiaban.getText().trim();
+            String anh = txtAnh.getText().trim();
+        
+            // Kiểm tra rỗng
+            if (maQuanAo.isEmpty() || tenQuanAo.isEmpty() || soLuongStr.isEmpty() ||
+                donGiaNhapStr.isEmpty() || donGiaBanStr.isEmpty() || anh.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin sản phẩm!");
+                return;
+            }
+            
             try {
-                int maQuanAo = Integer.parseInt(txtMaquanao.getText().trim());
-                String tenQuanAo = txtTenquanao.getText().trim();
-                BigDecimal donGiaNhap = new BigDecimal(txtDongianhap.getText().trim());
-                BigDecimal donGiaBan = new BigDecimal(txtDongiaban.getText().trim());
-                int soLuong = Integer.parseInt(txtSoluong.getText().trim());
-                String anh = txtAnh.getText().trim();
+                int soLuong = Integer.parseInt(soLuongStr);
+                double donGiaNhap = Double.parseDouble(donGiaNhapStr);
+                double donGiaBan = Double.parseDouble(donGiaBanStr);
         
-                // Lấy mã từ combobox (giả sử combobox chứa Integer)
-                int maLoai = (int) boxLoai.getSelectedItem();
-                int maChatLieu = (int) boxChatlieu.getSelectedItem();
-                int maDoiTuong = (int) boxDoituong.getSelectedItem();
-                int maCo = (int) boxKichco.getSelectedItem();
-                int maMua = (int) boxMua.getSelectedItem();
-                int maMau = (int) boxMau.getSelectedItem();
-                int maNSX = (int) boxNoisanxuat.getSelectedItem();
+                // Lấy ID từ combobox
+                int maLoai = Sanphamdata.getIdFromCombo(boxLoai,"MaLoai", "theloai", "TenLoai");
+                int maChatLieu = Sanphamdata.getIdFromCombo(boxChatlieu,"MaChatLieu", "chatlieu", "TenChatLieu");
+                int maDoituong = Sanphamdata.getIdFromCombo(boxDoituong,"MaDoiTuong", "doituong", "TenDoiTuong");
+                int maKichCo = Sanphamdata.getIdFromCombo(boxKichco,"MaCo", "co", "TenCo");
+                int maMua = Sanphamdata.getIdFromCombo(boxMua,"MaMua", "mua", "TenMua");
+                int maMau = Sanphamdata.getIdFromCombo(boxMau,"MaMau", "mau", "TenMau");
+                int maNSX = Sanphamdata.getIdFromCombo(boxNoisanxuat,"MaNSX", "noisanxuat", "TenNSX");
         
-                if (tenQuanAo.isEmpty() || anh.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin.");
-                    return;
-                }
-        
-                Sanphamdata dao = new Sanphamdata();
-                if (dao.kiemTraTrungMaQuanAo(maQuanAo)) {
-                    JOptionPane.showMessageDialog(null, "Mã quần áo đã tồn tại!");
-                    return;
-                }
-        
-                boolean thanhCong = dao.themSanPham(maQuanAo, tenQuanAo, maLoai, maCo, maChatLieu,
-                                                     maMau, maDoiTuong, maMua, maNSX,
-                                                     soLuong, anh, donGiaNhap, donGiaBan);
+                // Gọi DAO cập nhật
+                boolean thanhCong = Sanphamdata.capNhatSanPham(
+                    maQuanAo, tenQuanAo, maLoai, maKichCo, maChatLieu,
+                    maMau, maDoituong, maMua, maNSX, soLuong,
+                    anh, donGiaNhap, donGiaBan
+                );
         
                 if (thanhCong) {
-                    JOptionPane.showMessageDialog(null, "Thêm sản phẩm thành công!");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Thêm sản phẩm thất bại.");
+                    doDuLieuSanPham();
                 }
         
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng định dạng số.");
+                JOptionPane.showMessageDialog(null, "Đơn giá hoặc số lượng không hợp lệ!");
             }
-        });               
+        });                                  
     }
     public void hienThiChiTietSanPham() {
         int row = tblSanpham.getSelectedRow();
