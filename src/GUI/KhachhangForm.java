@@ -32,7 +32,6 @@ public class KhachhangForm extends javax.swing.JFrame {
         profilePic = new javax.swing.JLayeredPane();
         btnDathang = new javax.swing.JButton();
         btnSanpham = new javax.swing.JButton();
-        btnTrangchu = new javax.swing.JButton();
         btnXemgiohang = new javax.swing.JButton();
         btnDangxuat = new javax.swing.JButton();
         btnDoimatkhau = new javax.swing.JButton();
@@ -74,8 +73,6 @@ public class KhachhangForm extends javax.swing.JFrame {
 
         btnSanpham.setText("Sản phẩm");
 
-        btnTrangchu.setText("Trang chủ");
-
         btnXemgiohang.setText("Xem giỏ hàng");
 
         btnDangxuat.setText("Đăng xuất");
@@ -92,26 +89,26 @@ public class KhachhangForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(sidePanelLayout.createSequentialGroup()
-                        .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnDathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(sidePanelLayout.createSequentialGroup()
-                                .addComponent(profilePic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtChucvu)))
-                        .addContainerGap(16, Short.MAX_VALUE))
+                        .addComponent(profilePic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtChucvu)
+                        .addContainerGap(83, Short.MAX_VALUE))
                     .addGroup(sidePanelLayout.createSequentialGroup()
                         .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnDangxuat, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnTrangchu, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnXemgiohang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDoimatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnHoadondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnDoimatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(sidePanelLayout.createSequentialGroup()
                 .addGap(131, 131, 131)
                 .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(sidePanelLayout.createSequentialGroup()
+                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnXemgiohang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHoadondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         sidePanelLayout.setVerticalGroup(
             sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,9 +122,7 @@ public class KhachhangForm extends javax.swing.JFrame {
                     .addGroup(sidePanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(profilePic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26)
-                .addComponent(btnTrangchu, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(33, 33, 33)
                 .addComponent(btnDathang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnXemgiohang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -159,11 +154,11 @@ public class KhachhangForm extends javax.swing.JFrame {
         txtGiare.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         txtGiare.setText("GIÁ RẺ");
 
-        anh1.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final1.png"))); // NOI18N
+        anh1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final1.png"))); // NOI18N
 
-        anh2.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final2.png"))); // NOI18N
+        anh2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final2.png"))); // NOI18N
 
-        anh3.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/final3.png"))); // NOI18N
+        anh3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/final3.png"))); // NOI18N
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -281,7 +276,6 @@ public class KhachhangForm extends javax.swing.JFrame {
     private javax.swing.JButton btnDoimatkhau;
     private javax.swing.JButton btnHoadondathang;
     private javax.swing.JButton btnSanpham;
-    private javax.swing.JButton btnTrangchu;
     private javax.swing.JButton btnXemgiohang;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

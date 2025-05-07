@@ -2,19 +2,38 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.oopjava;
+package GUI;
+
+import javax.swing.JOptionPane;
+
+import BackEnd.OTP1Service;
 
 /**
  *
  * @author Neo 16
  */
 public class OTP1 extends javax.swing.JFrame {
-
     /**
      * Creates new form Quenmatkhau
      */
-    public OTP1() {
+    public OTP1(String otp, String username, String newPassword) {
         initComponents();
+         btnXacthuc.addActionListener(e -> {
+            String inputOTP = txtOTP.getText().trim();
+            OTP1Service service = new OTP1Service();
+            boolean result = service.verifyOTPAndChangePassword(inputOTP, otp, username, newPassword);
+            if (result) {
+                JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công!");
+                new Start().setVisible(true);
+                dispose(); // Đóng form
+            } else {
+                JOptionPane.showMessageDialog(this, "OTP không đúng!");
+            }
+        });
+        btnQuaylai.addActionListener(e -> {
+            new Doimatkhau().setVisible(true);
+            dispose();
+        });
     }
 
     /**
@@ -153,11 +172,13 @@ public class OTP1 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new OTP1().setVisible(true);
+                String otp="";
+                String username="";
+                String newPassword="";
+                new OTP1(otp, username, newPassword).setVisible(true);
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnQuaylai;
     private javax.swing.JButton btnXacthuc;

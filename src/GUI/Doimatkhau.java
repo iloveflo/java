@@ -2,7 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.oopjava;
+package GUI;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+
+import BackEnd.DoiMatKhauService;
 
 /**
  *
@@ -15,8 +20,38 @@ public class Doimatkhau extends javax.swing.JFrame {
      */
     public Doimatkhau() {
         initComponents();
+        btnQuaylai.addActionListener(e -> {
+            new Start().setVisible(true);
+            dispose();
+        });
+        boxHienmatkhau.addActionListener(e -> {
+            char echoChar = boxHienmatkhau.isSelected() ? (char) 0 : '*';
+            txtMatkhaucu.setEchoChar(echoChar);
+            txtMatkhaumoi.setEchoChar(echoChar);
+            txtNhaplaimatkhaumoi.setEchoChar(echoChar);
+        }); 
+        btnDoimatkhau.addActionListener(e -> {
+            // Lấy dữ liệu từ các TextField
+            String username = txtTendangnhap.getText().trim();
+            String oldPass = new String(txtMatkhaucu.getPassword()).trim();
+            String newPass = new String(txtMatkhaumoi.getPassword()).trim();
+            String reEnter = new String(txtNhaplaimatkhaumoi.getPassword()).trim();
+        
+            // Kiểm tra mật khẩu mới và xác nhận
+            if (!newPass.equals(reEnter)) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng mật khẩu mới", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        
+            // Gọi phương thức doiMatKhau và truyền các tham số hợp lệ
+            boolean result = DoiMatKhauService.doiMatKhau(username, oldPass, newPass);
+            
+            // Nếu thay đổi mật khẩu thành công, đóng form
+            if (result) {
+                this.dispose(); // Đóng form
+            }
+        });        
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,11 +67,11 @@ public class Doimatkhau extends javax.swing.JFrame {
         lblTendangnhap = new javax.swing.JLabel();
         txtTendangnhap = new javax.swing.JTextField();
         btnDoimatkhau = new javax.swing.JButton();
-        txtMatkhaucu = new javax.swing.JTextField();
+        txtMatkhaucu = new JPasswordField();
+        txtMatkhaumoi = new JPasswordField();
+        txtNhaplaimatkhaumoi = new JPasswordField();
         lblTendangnhap1 = new javax.swing.JLabel();
-        txtMatkhaumoi = new javax.swing.JTextField();
         lblTendangnhap2 = new javax.swing.JLabel();
-        txtNhaplaimatkhaumoi = new javax.swing.JTextField();
         lblTendangnhap3 = new javax.swing.JLabel();
         boxHienmatkhau = new javax.swing.JCheckBox();
 
@@ -248,9 +283,9 @@ public class Doimatkhau extends javax.swing.JFrame {
     private javax.swing.JLabel lblTendangnhap1;
     private javax.swing.JLabel lblTendangnhap2;
     private javax.swing.JLabel lblTendangnhap3;
-    private javax.swing.JTextField txtMatkhaucu;
-    private javax.swing.JTextField txtMatkhaumoi;
-    private javax.swing.JTextField txtNhaplaimatkhaumoi;
+    private JPasswordField txtMatkhaucu;
+    private JPasswordField txtMatkhaumoi;
+    private JPasswordField txtNhaplaimatkhaumoi;
     private javax.swing.JTextField txtTendangnhap;
     // End of variables declaration//GEN-END:variables
 }
