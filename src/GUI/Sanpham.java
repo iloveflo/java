@@ -12,11 +12,12 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.awt.Image;
 import java.io.File;
-import java.math.BigDecimal;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import BackEnd.*;
@@ -137,7 +138,61 @@ public class Sanpham extends javax.swing.JFrame {
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Đơn giá hoặc số lượng không hợp lệ!");
             }
-        });                                  
+        });
+        btnLoc.addActionListener(e -> {
+            String maquanao = txtMaquanao.getText().trim();
+            String loai = boxLoai.getSelectedItem() != null ? boxLoai.getSelectedItem().toString() : null;
+            String chatlieu = boxChatlieu.getSelectedItem() != null ? boxChatlieu.getSelectedItem().toString() : null;
+            String doituong = boxDoituong.getSelectedItem() != null ? boxDoituong.getSelectedItem().toString() : null;
+            String kichco = boxKichco.getSelectedItem() != null ? boxKichco.getSelectedItem().toString() : null;
+            String mua = boxMua.getSelectedItem() != null ? boxMua.getSelectedItem().toString() : null;
+            String mau = boxMau.getSelectedItem() != null ? boxMau.getSelectedItem().toString() : null;
+            String nsx = boxNoisanxuat.getSelectedItem() != null ? boxNoisanxuat.getSelectedItem().toString() : null;
+        
+            Sanphamdata service = new Sanphamdata();
+            DefaultTableModel model = service.locSanPham(maquanao, loai, chatlieu, doituong, kichco, mua, mau, nsx);
+            tblSanpham.setModel(model);
+        });
+        btnLammoi.addActionListener(e -> {
+            // Làm mới dữ liệu bảng sản phẩm
+            doDuLieuSanPham();
+        
+            // Reset comboboxes
+            boxLoai.setSelectedIndex(-1);
+            boxChatlieu.setSelectedIndex(-1);
+            boxDoituong.setSelectedIndex(-1);
+            boxKichco.setSelectedIndex(-1);
+            boxMua.setSelectedIndex(-1);
+            boxMau.setSelectedIndex(-1);
+            boxNoisanxuat.setSelectedIndex(-1);
+        
+            // Xóa dữ liệu các textboxes
+            txtMaquanao.setText("");
+            txtTenquanao.setText("");
+            txtDongianhap.setText("");
+            txtDongiaban.setText("");
+            txtSoluong.setText("");
+            txtAnh.setText("");
+        
+           hienThiAnh("src/GUI/icons/Ảnh chụp màn hình 2025-05-07 194832.png");  
+        });
+        btnMo.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Image files", "jpg", "jpeg", "png"
+            );
+            fileChooser.setFileFilter(filter);
+
+            int result = fileChooser.showOpenDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String filePath = selectedFile.getAbsolutePath();
+                txtAnh.setText(filePath);  // Hiển thị đường dẫn
+
+                // Hiển thị ảnh vào JPanel "Anh"
+                hienThiAnh(filePath);     // Gọi lại hàm bạn đã có sẵn
+            }
+        });                                           
     }
     public void hienThiChiTietSanPham() {
         int row = tblSanpham.getSelectedRow();
@@ -191,7 +246,6 @@ public class Sanpham extends javax.swing.JFrame {
         }
     }
     
-
     public void doDuLieuSanPham() {
         DefaultTableModel model = new DefaultTableModel(
             new String[] {
@@ -245,9 +299,6 @@ public class Sanpham extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Lỗi khi tải dữ liệu sản phẩm:\n" + e.getMessage());
         }
     }
-
-
-
     private void capNhatDangNhap() {
         try (Connection conn = ketnoiCSDL.getConnection()) {
             String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
@@ -258,7 +309,6 @@ public class Sanpham extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }
-
     private void capNhatDangNhapVaThoat() {
         capNhatDangNhap();
         SessionManager.clearSession();

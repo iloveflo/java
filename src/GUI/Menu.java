@@ -69,6 +69,11 @@ public class Menu extends javax.swing.JFrame {
             dispose();
         });
 
+        btnDoanhthu.addActionListener(e -> {
+            new Thongke().setVisible(true);
+            dispose();
+        });
+
         // Các nút khác (tùy bạn muốn thêm)
     }
 

@@ -4,6 +4,24 @@
  */
 package GUI;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.awt.BorderLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Vector;
+import BackEnd.*;
+import java.awt.Image;
+
 /**
  *
  * @author Neo 16
@@ -15,7 +33,117 @@ public class Mathangsaphet extends javax.swing.JFrame {
      */
     public Mathangsaphet() {
         initComponents();
+        loadMatHangSapHet();
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                capNhatDangNhapVaThoat();
+            }
+        });
+        btnThoat.addActionListener(e -> {
+            new Thongke().setVisible(true);
+            dispose();
+        });
+        btnHoadonnhap.addActionListener(e -> {
+            new Hoadonnhap().setVisible(true);
+            dispose();
+        });
+
+        tblMathangsaphet.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = tblMathangsaphet.getSelectedRow();
+                if (selectedRow != -1) {
+                    String ma = tblMathangsaphet.getValueAt(selectedRow, 0).toString();
+                    String ten = tblMathangsaphet.getValueAt(selectedRow, 1).toString();
+                    String soluong = tblMathangsaphet.getValueAt(selectedRow, 2).toString();
+                    String duongDanAnh = tblMathangsaphet.getValueAt(selectedRow, 3).toString();
+
+                    txtMaquanao.setText(ma);
+                    txtTenquanao.setText(ten);
+                    txtSoluong.setText(soluong);
+                    txtAnh.setText(duongDanAnh);
+
+                    hienThiAnh(duongDanAnh); // Gọi hàm bạn đã viết để hiển thị ảnh
+                }
+            }
+        });
     }
+    public void hienThiAnh(String duongDan) {
+        try {
+            // Đảm bảo đường dẫn hợp lệ (kiểm tra xem tệp có tồn tại không)
+            File file = new File(duongDan);
+            if (!file.exists()) {
+                JOptionPane.showMessageDialog(null, "Ảnh không tồn tại tại: " + duongDan);
+                return;
+            }
+    
+            // Tạo đối tượng ImageIcon từ đường dẫn ảnh
+            ImageIcon icon = new ImageIcon(duongDan);
+            // Tải ảnh và thay đổi kích thước phù hợp với JPanel (Anh)
+            Image img = icon.getImage().getScaledInstance(Anh.getWidth(), Anh.getHeight(), Image.SCALE_SMOOTH);
+    
+            // Tạo một JLabel chứa ảnh đã thay đổi kích thước
+            JLabel lbl = new JLabel(new ImageIcon(img));
+    
+            // Xóa hết nội dung cũ của JPanel trước khi thêm ảnh mới
+            Anh.removeAll();
+            Anh.setLayout(new BorderLayout()); // Đảm bảo layout hợp lý
+            Anh.add(lbl, BorderLayout.CENTER); // Thêm JLabel vào giữa JPanel
+    
+            // Cập nhật lại giao diện
+            Anh.revalidate();
+            Anh.repaint();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Không thể hiển thị ảnh: " + duongDan);
+        }
+    }
+
+     private void capNhatDangNhap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, SessionManager.getMaTaiKhoan());
+            stmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void loadMatHangSapHet() {
+        DefaultTableModel model = new DefaultTableModel(
+            new String[] { "Mã quần áo", "Tên quần áo", "Số lượng", "Ảnh" }, 0
+        );
+
+        String query = "SELECT MaQuanAo, TenQuanAo, SoLuong, Anh FROM SanPham WHERE SoLuong <= 30";
+
+        try (Connection conn = ketnoiCSDL.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Vector<Object> row = new Vector<>();
+                row.add(rs.getString("MaQuanAo"));
+                row.add(rs.getString("TenQuanAo"));
+                row.add(rs.getInt("SoLuong"));
+                row.add(rs.getString("Anh")); // Hoặc có thể chuyển ảnh thành ImageIcon nếu cần
+
+                model.addRow(row);
+            }
+
+            tblMathangsaphet.setModel(model);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Lỗi khi tải dữ liệu: " + ex.getMessage());
+        }
+    }
+
+    private void capNhatDangNhapVaThoat() {
+        capNhatDangNhap();
+        SessionManager.clearSession();
+        System.exit(0);
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.

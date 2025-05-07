@@ -5,9 +5,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class Sanphamdata {
     public static void doDuLieuVaoComboBox(JComboBox<String> comboBox, String tenBang, String tenCot) {
@@ -181,4 +184,94 @@ public class Sanphamdata {
 
         return false;
     }
+    public DefaultTableModel locSanPham(
+        String maquanao, String tenLoai, String chatlieu, String doituong,
+        String kichco, String mua, String mau, String noisanxuat
+    ) {
+        String sql = "SELECT s.MaQuanAo, s.TenQuanAo, t.TenLoai, c.TenCo, cl.TenChatLieu, " +
+                     "m.TenMau, dt.TenDoiTuong, mu.TenMua, ns.TenNSX, " +
+                     "s.DonGiaBan, s.DonGiaNhap, s.SoLuong, s.Anh " +
+                     "FROM sanpham s " +
+                     "JOIN theloai t ON s.MaLoai = t.MaLoai " +
+                     "JOIN co c ON s.MaCo = c.MaCo " +
+                     "JOIN mau m ON s.MaMau = m.MaMau " +
+                     "JOIN mua mu ON s.MaMua = mu.MaMua " +
+                     "JOIN doituong dt ON s.MaDoiTuong = dt.MaDoiTuong " +
+                     "JOIN chatlieu cl ON s.MaChatLieu = cl.MaChatLieu " +
+                     "JOIN noisanxuat ns ON s.MaNSX = ns.MaNSX WHERE 1=1 ";
+    
+        List<Object> params = new ArrayList<>();
+    
+        if (!maquanao.isEmpty()) {
+            sql += " AND s.MaQuanAo = ?";
+            params.add(maquanao);
+        }
+        if (tenLoai != null) {
+            sql += " AND t.TenLoai = ?";
+            params.add(tenLoai);
+        }
+        if (kichco != null) {
+            sql += " AND c.TenCo = ?";
+            params.add(kichco);
+        }
+        if (mau != null) {
+            sql += " AND m.TenMau = ?";
+            params.add(mau);
+        }
+        if (mua != null) {
+            sql += " AND mu.TenMua = ?";
+            params.add(mua);
+        }
+        if (doituong != null) {
+            sql += " AND dt.TenDoiTuong = ?";
+            params.add(doituong);
+        }
+        if (chatlieu != null) {
+            sql += " AND cl.TenChatLieu = ?";
+            params.add(chatlieu);
+        }
+        if (noisanxuat != null) {
+            sql += " AND ns.TenNSX = ?";
+            params.add(noisanxuat);
+        }
+    
+        DefaultTableModel model = new DefaultTableModel(
+            new String[] {
+                "Mã quần áo", "Tên quần áo", "Thể loại", "Cỡ", "Chất liệu", 
+                "Màu", "Đối tượng", "Mùa", "Nơi sản xuất", 
+                "Đơn giá bán", "Đơn giá nhập", "Số lượng", "Ảnh"
+            }, 0
+        );
+    
+        try (Connection conn = ketnoiCSDL.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+    
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Vector<Object> row = new Vector<>();
+                row.add(rs.getString("MaQuanAo"));
+                row.add(rs.getString("TenQuanAo"));
+                row.add(rs.getString("TenLoai"));
+                row.add(rs.getString("TenCo"));
+                row.add(rs.getString("TenChatLieu"));
+                row.add(rs.getString("TenMau"));
+                row.add(rs.getString("TenDoiTuong"));
+                row.add(rs.getString("TenMua"));
+                row.add(rs.getString("TenNSX"));
+                row.add(rs.getDouble("DonGiaBan"));
+                row.add(rs.getDouble("DonGiaNhap"));
+                row.add(rs.getInt("SoLuong"));
+                row.add(rs.getString("Anh"));
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+        return model;
+    }    
 }
