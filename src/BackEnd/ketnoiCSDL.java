@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ketnoiCSDL {
     // Thay localhost bằng IP của máy bạn
-    private static final String URL = "jdbc:mysql://localhost:3306/ClothingStore?useSSL=false&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://localhost:3306/ClothingStore?useSSL=false&allowPublicKeyRetrieval=true";
     private static final String USER = "root";           // Hoặc user bạn cấp quyền
     private static final String PASSWORD = "binh11a10";  // Mật khẩu tương ứng
 
@@ -14,3 +14,4 @@ public class ketnoiCSDL {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }
+
