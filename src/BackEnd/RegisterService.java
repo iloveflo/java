@@ -88,7 +88,12 @@ public class RegisterService {
         if (!soDienThoai.matches("^\\d{10}$")) {
             JOptionPane.showMessageDialog(null, "Số điện thoại phải là 10 chữ số!");
             return;
-        }        
+        }
+        
+        if (maTaiKhoan.length() > 10) {
+            JOptionPane.showMessageDialog(null, "Mã tài khoản không được vượt quá 10 ký tự!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         if (!password.equals(rePassword)) {
             JOptionPane.showMessageDialog(null, "Password và Re-enter Password chưa giống nhau!", "Lỗi", JOptionPane.ERROR_MESSAGE);

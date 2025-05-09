@@ -101,6 +101,11 @@ public class NhanvienData {
                 JOptionPane.showMessageDialog(null, "Số điện thoại hoặc email đã tồn tại.");
                 return;
             }
+            
+            if (!maNV.matches("\\d+")) {
+                JOptionPane.showMessageDialog(null, "Mã nhân viên phải là số.");
+                return;
+            }
 
             String insertTaiKhoan = "INSERT INTO taikhoan (MaTaiKhoan, TenDangNhap, MatKhau, LoaiTaiKhoan, DangNhap) "
                                   + "VALUES (?, ?, ?, 'NhanVien', 0)";
