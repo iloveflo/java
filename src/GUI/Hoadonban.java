@@ -35,8 +35,14 @@ public class Hoadonban extends javax.swing.JFrame {
             }
         });
         btnThoat.addActionListener(e -> {
-            new Menu().setVisible(true);
-            dispose();
+            if(SessionManager.getLoaiTaiKhoan().equals("Admin")){
+                new Menu().setVisible(true);
+                dispose();
+            }
+            if(SessionManager.getLoaiTaiKhoan().equals("NhanVien")){
+                new NhanvienForm().setVisible(true);
+                dispose();
+            }
         });
         btnXuathoadon.addActionListener(e -> {
             String soHoaDon = txtSohoadonban.getText().trim();

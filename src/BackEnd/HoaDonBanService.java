@@ -42,7 +42,7 @@ public class HoaDonBanService {
             
             Row titleRow = sheet.createRow(row++);
             Cell titleCell = titleRow.createCell(0);
-            titleCell.setCellValue("HÓA ĐƠN BÁN HÀNG - CLOTHINGSTORE");
+            titleCell.setCellValue("HÓA ĐƠN BÁN HÀNG - BDTHD");
             CellStyle styleTitle = wb.createCellStyle();
             Font fontTitle = wb.createFont();
             fontTitle.setBold(true);
@@ -61,7 +61,7 @@ public class HoaDonBanService {
                 sheet.createRow(row++).createCell(0).setCellValue("Số điện thoại: " + rs.getString("SDTKhach"));
                 sheet.createRow(row++).createCell(0).setCellValue("Email: " + rs.getString("EmailKhach"));
                 sheet.createRow(row++).createCell(0).setCellValue("Nhân viên bán: " + rs.getString("TenNhanVien"));
-                sheet.createRow(row++).createCell(0).setCellValue("Liên hệ: " + rs.getString("SDTNhanVien"));
+                sheet.createRow(row++).createCell(0).setCellValue("Liên hệ hỗ trợ: " + rs.getString("SDTNhanVien"));
                 row++;
 
                 Row header = sheet.createRow(row++);

@@ -7,7 +7,6 @@ package GUI;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
 import BackEnd.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

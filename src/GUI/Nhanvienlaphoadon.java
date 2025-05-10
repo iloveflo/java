@@ -69,6 +69,42 @@ public class Nhanvienlaphoadon extends javax.swing.JFrame {
             DefaultTableModel model = DonHangDAO.timKiemTrongGioHang(maKH);
             tblLaphoadon.setModel(model);
         });
+
+        btnLammoi.addActionListener(e -> {
+            // 1. Xóa trắng các textbox
+            txtMakhachhang.setText("");
+            txtMaquanao.setText("");
+            txtDongiaban.setText("");
+            txtTongtien.setText("");
+            txtSoluong.setText("");
+
+            // 2. Xóa ảnh hiển thị (nếu có Panel ảnh riêng)
+            Anh.removeAll();
+            Anh.repaint();
+
+            // 3. Tải lại dữ liệu bảng GioHang
+            loadDuLieuGioHang();
+        });
+
+        btnLaphoadon.addActionListener(e -> {
+            int row = tblLaphoadon.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn dòng!");
+                return;
+            }
+
+            String maKH = tblLaphoadon.getValueAt(row, 0).toString();
+            String maQA = tblLaphoadon.getValueAt(row, 1).toString();
+            double donGia = Double.parseDouble(tblLaphoadon.getValueAt(row, 2).toString());
+            int soLuong = Integer.parseInt(tblLaphoadon.getValueAt(row, 3).toString());
+
+            // Giả sử bạn có mã nhân viên đang đăng nhập như sau:
+            String maNV = SessionManager.getMaTaiKhoan();
+
+            DonHangDAO.lapHoaDon(maQA, soLuong, donGia, maKH, maNV, tblLaphoadon);
+            loadDuLieuGioHang(); // Sau khi lập hóa đơn xong thì reload lại bảng
+        });
+
     }
     private void capNhatDangNhap() {
         try (Connection conn = ketnoiCSDL.getConnection()) {
@@ -89,7 +125,7 @@ public class Nhanvienlaphoadon extends javax.swing.JFrame {
     private void showImageOnPanel(ImageIcon icon) {
         Anh.removeAll(); // clear ảnh cũ
 
-        // Resize ảnh lớn hơn cho panel, ví dụ 200x200
+        // Resize ảnh lớn hơn cho panel
         Image img = icon.getImage().getScaledInstance(200, 270, Image.SCALE_SMOOTH);
         JLabel lbl = new JLabel(new ImageIcon(img));
 
