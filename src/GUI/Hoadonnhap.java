@@ -36,10 +36,18 @@ public class Hoadonnhap extends javax.swing.JFrame {
                 capNhatDangNhapVaThoat();
             }
         });
+        
         btnThoat.addActionListener(e -> {
-            new Menu().setVisible(true);
-            dispose();
+            if(SessionManager.getLoaiTaiKhoan().equals("Admin")){
+                new Thongke().setVisible(true);
+                dispose();
+            }
+            if(SessionManager.getLoaiTaiKhoan().equals("NhanVien")){
+                new NhanvienForm().setVisible(true);
+                dispose();
+            }
         });
+
         tblHoadonnhap.getSelectionModel().addListSelectionListener(e -> {
             int selectedRow = tblHoadonnhap.getSelectedRow();
             if (!e.getValueIsAdjusting() && selectedRow >= 0) {

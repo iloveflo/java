@@ -41,10 +41,18 @@ public class Mathangsaphet extends javax.swing.JFrame {
                 capNhatDangNhapVaThoat();
             }
         });
+
         btnThoat.addActionListener(e -> {
-            new Thongke().setVisible(true);
-            dispose();
+            if(SessionManager.getLoaiTaiKhoan().equals("Admin")){
+                new Thongke().setVisible(true);
+                dispose();
+            }
+            if(SessionManager.getLoaiTaiKhoan().equals("NhanVien")){
+                new NhanvienForm().setVisible(true);
+                dispose();
+            }
         });
+        
         btnHoadonnhap.addActionListener(e -> {
             new Hoadonnhap().setVisible(true);
             dispose();

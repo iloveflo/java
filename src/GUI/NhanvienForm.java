@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
-
 import BackEnd.*;
 
 /**
@@ -44,6 +43,26 @@ public class NhanvienForm extends javax.swing.JFrame {
             new Start().setVisible(true);
             dispose();
         });
+
+        btnDsachSanpham.addActionListener(e -> {
+            new NVdanhSachsPham().setVisible(true);
+            dispose();
+        });
+
+        btnXemdondathang.addActionListener(e -> {
+            new Nhanvienlaphoadon().setVisible(true);
+            dispose();
+        });
+
+        btnXemhoadonban.addActionListener(e -> {
+            new Hoadonban().setVisible(true);
+            dispose();
+        });
+
+        btnSanphamsaphet.addActionListener(e -> {
+            new Mathangsaphet().setVisible(true);
+            dispose();
+        });
     }
     private void capNhatDangNhap() {
         try (Connection conn = ketnoiCSDL.getConnection()) {
@@ -62,6 +81,7 @@ public class NhanvienForm extends javax.swing.JFrame {
         System.exit(0);
     }
 
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -75,13 +95,12 @@ public class NhanvienForm extends javax.swing.JFrame {
         txtName = new javax.swing.JLabel();
         txtChucvu = new javax.swing.JLabel();
         profilePic = new javax.swing.JLayeredPane();
-        btnSanpham = new javax.swing.JButton();
-        btnSanphambanchay = new javax.swing.JButton();
+        btnDsachSanpham = new javax.swing.JButton();
         btnDangxuat = new javax.swing.JButton();
         btnXemdondathang = new javax.swing.JButton();
         btnDoimatkhau = new javax.swing.JButton();
-        btnLaphoadonnhap = new javax.swing.JButton();
         btnSanphamsaphet = new javax.swing.JButton();
+        btnXemhoadonban = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -116,9 +135,7 @@ public class NhanvienForm extends javax.swing.JFrame {
             .addGap(0, 110, Short.MAX_VALUE)
         );
 
-        btnSanpham.setText("Sản phẩm");
-
-        btnSanphambanchay.setText("Sản phẩm bán chạy");
+        btnDsachSanpham.setText("Xem danh sách sản phẩm");
 
         btnDangxuat.setText("Đăng xuất");
 
@@ -126,14 +143,15 @@ public class NhanvienForm extends javax.swing.JFrame {
 
         btnDoimatkhau.setText("Đổi mật khẩu");
 
-        btnLaphoadonnhap.setText("Lập hóa đơn");
-
         btnSanphamsaphet.setText("Sản phẩm sắp hết");
         btnSanphamsaphet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSanphamsaphetActionPerformed(evt);
             }
         });
+
+        btnXemhoadonban.setText("Xem hóa đơn bán");
+        btnXemhoadonban.setActionCommand("Xem hóa đơn bán");
 
         javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
@@ -159,11 +177,10 @@ public class NhanvienForm extends javax.swing.JFrame {
             .addGroup(sidePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSanphambanchay, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDsachSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnXemdondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLaphoadonnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSanphamsaphet, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSanphamsaphet, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnXemhoadonban, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         sidePanelLayout.setVerticalGroup(
@@ -179,15 +196,13 @@ public class NhanvienForm extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(profilePic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(32, 32, 32)
-                .addComponent(btnSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(btnSanphambanchay, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnDsachSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnSanphamsaphet, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(btnXemdondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLaphoadonnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnXemhoadonban, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDoimatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -345,11 +360,10 @@ public class NhanvienForm extends javax.swing.JFrame {
     private javax.swing.JLabel anh3;
     private javax.swing.JButton btnDangxuat;
     private javax.swing.JButton btnDoimatkhau;
-    private javax.swing.JButton btnLaphoadonnhap;
-    private javax.swing.JButton btnSanpham;
-    private javax.swing.JButton btnSanphambanchay;
+    private javax.swing.JButton btnDsachSanpham;
     private javax.swing.JButton btnSanphamsaphet;
     private javax.swing.JButton btnXemdondathang;
+    private javax.swing.JButton btnXemhoadonban;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

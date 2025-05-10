@@ -4,6 +4,13 @@
  */
 package GUI;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
+import BackEnd.*;
+
 /**
  *
  * @author Neo 16
@@ -15,7 +22,34 @@ public class Nhanvienlaphoadon extends javax.swing.JFrame {
      */
     public Nhanvienlaphoadon() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                capNhatDangNhapVaThoat();
+            }
+        });
+        btnThoat.addActionListener(e -> {
+            new NhanvienForm().setVisible(true);
+            dispose();
+        });
     }
+    private void capNhatDangNhap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, SessionManager.getMaTaiKhoan());
+            stmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    private void capNhatDangNhapVaThoat() {
+        capNhatDangNhap();
+        SessionManager.clearSession();
+        System.exit(0);
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,14 +89,14 @@ public class Nhanvienlaphoadon extends javax.swing.JFrame {
         boxDongiaban = new javax.swing.JTextField();
         lblDongiaban = new javax.swing.JLabel();
         btnLaphoadon = new javax.swing.JButton();
-        btnXemdondathang = new javax.swing.JButton();
+        btnLammoi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(200, 173, 127));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("LẬP HÓA ĐƠN");
+        jLabel1.setText("DANH SÁCH ĐƠN ĐẶT HÀNG");
 
         tblLaphoadon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -146,7 +180,7 @@ public class Nhanvienlaphoadon extends javax.swing.JFrame {
 
         btnLaphoadon.setText("Lập hóa đơn");
 
-        btnXemdondathang.setText("Xem đơn đặt hàng");
+        btnLammoi.setText("Làm mới");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -156,7 +190,7 @@ public class Nhanvienlaphoadon extends javax.swing.JFrame {
                 .addGap(361, 361, 361)
                 .addComponent(btnLaphoadon)
                 .addGap(95, 95, 95)
-                .addComponent(btnXemdondathang)
+                .addComponent(btnLammoi)
                 .addGap(93, 93, 93)
                 .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -284,7 +318,7 @@ public class Nhanvienlaphoadon extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLaphoadon, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnXemdondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnLammoi, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(17, 17, 17))
         );
 
@@ -422,7 +456,7 @@ public class Nhanvienlaphoadon extends javax.swing.JFrame {
     private javax.swing.JButton btnLaphoadon;
     private javax.swing.JButton btnThoat;
     private javax.swing.JButton btnTimkiem;
-    private javax.swing.JButton btnXemdondathang;
+    private javax.swing.JButton btnLammoi;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
