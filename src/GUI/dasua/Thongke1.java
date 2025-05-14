@@ -33,12 +33,10 @@ public class Thongke1 extends javax.swing.JPanel {
         lblThang = new javax.swing.JLabel();
         lblDoanhthu = new javax.swing.JLabel();
         txtDoanhthu = new javax.swing.JTextField();
-        btnMathangbanchay = new javax.swing.JButton();
         txtSoluong = new javax.swing.JTextField();
         lblSoluong = new javax.swing.JLabel();
         txtLoinhuan = new javax.swing.JTextField();
         lblLoinhuan = new javax.swing.JLabel();
-        btnMathangsaphet = new javax.swing.JButton();
         cbThang = new javax.swing.JComboBox<>();
 
         jPanel1.setBackground(new java.awt.Color(200, 173, 127));
@@ -65,25 +63,11 @@ public class Thongke1 extends javax.swing.JPanel {
         lblDoanhthu.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblDoanhthu.setText("Doanh Thu:");
 
-        btnMathangbanchay.setText("Mặt hàng bán chạy");
-        btnMathangbanchay.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMathangbanchayActionPerformed(evt);
-            }
-        });
-
         lblSoluong.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblSoluong.setText("Số lượng đã bán:");
 
         lblLoinhuan.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblLoinhuan.setText("Lợi nhuận:");
-
-        btnMathangsaphet.setText("Mặt hàng sắp hết");
-        btnMathangsaphet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMathangsaphetActionPerformed(evt);
-            }
-        });
 
         cbThang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -93,11 +77,6 @@ public class Thongke1 extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(204, 204, 204)
-                        .addComponent(btnMathangbanchay, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(99, 99, 99)
-                        .addComponent(btnMathangsaphet, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 975, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(50, 50, 50)
@@ -120,16 +99,16 @@ public class Thongke1 extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtLoinhuan, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(310, 310, 310)
+                        .addGap(326, 326, 326)
                         .addComponent(jLabel1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(17, 17, 17)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblThang)
                     .addComponent(lblDoanhthu)
@@ -141,11 +120,7 @@ public class Thongke1 extends javax.swing.JPanel {
                     .addComponent(txtSoluong, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblLoinhuan)
                     .addComponent(txtLoinhuan, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnMathangsaphet, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnMathangbanchay, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(82, 82, 82)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(97, 97, 97))
         );
@@ -166,18 +141,8 @@ public class Thongke1 extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnMathangbanchayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMathangbanchayActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMathangbanchayActionPerformed
-
-    private void btnMathangsaphetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMathangsaphetActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMathangsaphetActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnMathangbanchay;
-    private javax.swing.JButton btnMathangsaphet;
     private javax.swing.JComboBox<String> cbThang;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

@@ -8,12 +8,12 @@ package com.mycompany.oopjava;
  *
  * @author Neo 16
  */
-public class KhachhangForm extends javax.swing.JFrame {
+public class Menu extends javax.swing.JFrame {
 
     /**
      * Creates new form Menu
      */
-    public KhachhangForm() {
+    public Menu() {
         initComponents();
     }
 
@@ -30,12 +30,16 @@ public class KhachhangForm extends javax.swing.JFrame {
         txtName = new javax.swing.JLabel();
         txtChucvu = new javax.swing.JLabel();
         profilePic = new javax.swing.JLayeredPane();
-        btnDathang = new javax.swing.JButton();
+        btnKhachhang = new javax.swing.JButton();
         btnSanpham = new javax.swing.JButton();
-        btnXemgiohang = new javax.swing.JButton();
+        btnNhanvien = new javax.swing.JButton();
         btnDangxuat = new javax.swing.JButton();
+        btnDoanhthu = new javax.swing.JButton();
+        btnHoadonmuaban = new javax.swing.JButton();
         btnDoimatkhau = new javax.swing.JButton();
-        btnHoadondathang = new javax.swing.JButton();
+        btnHoadonnhap = new javax.swing.JButton();
+        btnMathangsaphet = new javax.swing.JButton();
+        btnMathangbanchay = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -48,7 +52,7 @@ public class KhachhangForm extends javax.swing.JFrame {
         txtName.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         txtName.setText("Nguyễn Văn A");
 
-        txtChucvu.setText("Khách hàng");
+        txtChucvu.setText("Admin");
 
         profilePic.setBackground(new java.awt.Color(204, 255, 255));
         profilePic.setOpaque(true);
@@ -64,17 +68,27 @@ public class KhachhangForm extends javax.swing.JFrame {
             .addGap(0, 110, Short.MAX_VALUE)
         );
 
-        btnDathang.setText("Đặt hàng");
+        btnKhachhang.setText("Khách hàng");
 
         btnSanpham.setText("Sản phẩm");
 
-        btnXemgiohang.setText("Xem giỏ hàng");
+        btnNhanvien.setText("Nhân viên");
 
         btnDangxuat.setText("Đăng xuất");
 
+        btnDoanhthu.setText(" Thống kê doanh thu");
+
+        btnHoadonmuaban.setText("Hóa đơn mua bán");
+        btnHoadonmuaban.setActionCommand("Mặt hàng bán chạy");
+
         btnDoimatkhau.setText("Đổi mật khẩu");
 
-        btnHoadondathang.setText("Hóa đơn đặt hàng");
+        btnHoadonnhap.setText("Hóa đơn nhập");
+
+        btnMathangsaphet.setText("Mặt hàng sắp hết");
+        btnMathangsaphet.setActionCommand("Mặt hàng bán chạy");
+
+        btnMathangbanchay.setText("Mặt hàng bán chạy");
 
         javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
@@ -87,7 +101,7 @@ public class KhachhangForm extends javax.swing.JFrame {
                         .addComponent(profilePic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(txtChucvu)
-                        .addContainerGap(83, Short.MAX_VALUE))
+                        .addContainerGap(110, Short.MAX_VALUE))
                     .addGroup(sidePanelLayout.createSequentialGroup()
                         .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnDangxuat, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -98,12 +112,17 @@ public class KhachhangForm extends javax.swing.JFrame {
                 .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(sidePanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnDathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnXemgiohang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnKhachhang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNhanvien, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHoadondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnDoanhthu, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHoadonmuaban, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHoadonnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMathangsaphet, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMathangbanchay, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         sidePanelLayout.setVerticalGroup(
             sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,15 +136,23 @@ public class KhachhangForm extends javax.swing.JFrame {
                     .addGroup(sidePanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(profilePic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(33, 33, 33)
-                .addComponent(btnDathang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(btnKhachhang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnXemgiohang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNhanvien, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnHoadondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnDoanhthu, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnHoadonmuaban, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnHoadonnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(btnMathangbanchay, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnMathangsaphet, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
                 .addComponent(btnDoimatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnDangxuat, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -148,7 +175,7 @@ public class KhachhangForm extends javax.swing.JFrame {
         );
         panelHienthiLayout.setVerticalGroup(
             panelHienthiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 599, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -156,15 +183,16 @@ public class KhachhangForm extends javax.swing.JFrame {
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addContainerGap(160, Short.MAX_VALUE)
+                .addGap(160, 160, 160)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 714, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(106, 106, 106))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(54, 54, 54))))
-            .addComponent(panelHienthi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(54, 54, 54)))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(panelHienthi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,7 +202,7 @@ public class KhachhangForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelHienthi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(panelHienthi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -184,7 +212,7 @@ public class KhachhangForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -215,32 +243,35 @@ public class KhachhangForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(KhachhangForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(KhachhangForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(KhachhangForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(KhachhangForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new KhachhangForm().setVisible(true);
+                new Menu().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangxuat;
-    private javax.swing.JButton btnDathang;
+    private javax.swing.JButton btnDoanhthu;
     private javax.swing.JButton btnDoimatkhau;
-    private javax.swing.JButton btnHoadondathang;
+    private javax.swing.JButton btnHoadonmuaban;
+    private javax.swing.JButton btnHoadonnhap;
+    private javax.swing.JButton btnKhachhang;
+    private javax.swing.JButton btnMathangbanchay;
+    private javax.swing.JButton btnMathangsaphet;
+    private javax.swing.JButton btnNhanvien;
     private javax.swing.JButton btnSanpham;
-    private javax.swing.JButton btnXemgiohang;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel mainPanel;
