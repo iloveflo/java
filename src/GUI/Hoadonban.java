@@ -28,7 +28,17 @@ public class Hoadonban extends javax.swing.JPanel {
             String soHoaDon = txtSohoadonban.getText().trim();
             HoaDonBanService.xuatHoaDon(soHoaDon);
         });
-        // Thiết lập sự kiện cho JTable khi click vào một dòng
+
+        btnTimkiem.addActionListener(e -> {
+            String maKH = txtMakhachhang.getText().trim();
+            if (!maKH.isEmpty()) {
+                DefaultTableModel model = (DefaultTableModel) tblHoadonban.getModel();
+                HoaDonBanService.timKiemHoaDonTheoMaKhachHang(model, maKH);
+            } else {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập mã khách hàng để tìm kiếm.");
+            }
+        });
+
         // Thiết lập sự kiện cho JTable khi click vào một dòng
         tblHoadonban.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {

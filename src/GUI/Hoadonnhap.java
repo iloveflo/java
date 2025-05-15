@@ -55,13 +55,15 @@ public class Hoadonnhap extends javax.swing.JPanel {
                 txtGiamgia.setText(giamgia != null ? giamgia.toString() : "");
             }
         });
+
         btnTimkiem.addActionListener(e -> {
-            String soHoaDon = txtSohoadonnhap.getText();
-            String tenNCC = boxNhacungcap.getSelectedItem().toString();
-            
-            // Gọi hàm tìm kiếm từ HoaDonNhapDAO và cập nhật dữ liệu lên bảng
-            DefaultTableModel model = HoaDonNhapService.timKiemHoaDonNhap(soHoaDon, tenNCC);
-            tblHoadonnhap.setModel(model);
+            String soHD = txtSohoadonnhap.getText().trim();
+            if (!soHD.isEmpty()) {
+                DefaultTableModel model = HoaDonNhapService.timKiemHoaDonNhap(soHD);
+                tblHoadonnhap.setModel(model);
+            } else {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập số hóa đơn nhập cần tìm.");
+            }
         });
 
         btnXuathoadon.addActionListener(e -> {
@@ -93,6 +95,7 @@ public class Hoadonnhap extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Lỗi tải nhà cung cấp: " + e.getMessage());
         }
     }
+    
     private void loadHoaDonNhapData() {
         DefaultTableModel model = (DefaultTableModel) tblHoadonnhap.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ

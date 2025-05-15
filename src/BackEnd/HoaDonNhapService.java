@@ -87,13 +87,13 @@ public class HoaDonNhapService {
             return false;
         }
     }
-    public static DefaultTableModel timKiemHoaDonNhap(String soHoaDonNhap, String tenNCC) {
+    public static DefaultTableModel timKiemHoaDonNhap(String soHoaDonNhap) {
         String query = "SELECT hd.SoHoaDonNhap, hd.MaNhanVien, ncc.TenNCC, ct.MaQuanAo, ct.SoLuong, ct.DonGia, ct.GiamGia, " +
-                       "ct.SoLuong * ct.DonGia * (1 - ct.GiamGia / 100) AS ThanhTien " +
-                       "FROM HoaDonNhap hd " +
-                       "JOIN NhaCungCap ncc ON hd.MaNCC = ncc.MaNCC " +
-                       "JOIN ChiTietHoaDonNhap ct ON hd.SoHoaDonNhap = ct.SoHoaDonNhap " +
-                       "WHERE hd.SoHoaDonNhap LIKE ? OR ncc.TenNCC LIKE ?";
+                    "ct.SoLuong * ct.DonGia * (1 - ct.GiamGia / 100) AS ThanhTien " +
+                    "FROM HoaDonNhap hd " +
+                    "JOIN NhaCungCap ncc ON hd.MaNCC = ncc.MaNCC " +
+                    "JOIN ChiTietHoaDonNhap ct ON hd.SoHoaDonNhap = ct.SoHoaDonNhap " +
+                    "WHERE hd.SoHoaDonNhap LIKE ?";
 
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(new Object[] {
@@ -102,10 +102,9 @@ public class HoaDonNhapService {
         });
 
         try (Connection conn = ketnoiCSDL.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+            PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, "%" + soHoaDonNhap + "%");
-            stmt.setString(2, "%" + tenNCC + "%");
 
             ResultSet rs = stmt.executeQuery();
 
@@ -127,7 +126,7 @@ public class HoaDonNhapService {
         return model;
     }
 
-     public static void xuat(String soHoaDonNhap) {
+    public static void xuat(String soHoaDonNhap) {
         try (Connection conn = ketnoiCSDL.getConnection()) {
 
             // Truy vấn thông tin chung

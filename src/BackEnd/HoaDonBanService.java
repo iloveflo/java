@@ -4,10 +4,13 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 public class HoaDonBanService {
@@ -103,6 +106,38 @@ public class HoaDonBanService {
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Lỗi khi xuất hóa đơn: " + ex.getMessage());
+        }
+    }
+
+    public static void timKiemHoaDonTheoMaKhachHang(DefaultTableModel model, String maKH) {
+        model.setRowCount(0); // Xóa dữ liệu cũ
+
+        String sql = "SELECT hdb.SoHoaDonBan, ct.MaQuanAo, hdb.MaKhachHang, hdb.MaNhanVien, ct.SoLuong, hdb.NgayBan, ct.ThanhTien " +
+                     "FROM hoadonban hdb " +
+                     "JOIN chitiethoadonban ct ON hdb.SoHoaDonBan = ct.SoHoaDonBan " +
+                     "WHERE hdb.MaKhachHang = ?";
+
+        try (Connection conn = ketnoiCSDL.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setString(1, maKH);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Object[] row = {
+                        rs.getInt("SoHoaDonBan"),
+                        rs.getInt("MaQuanAo"),
+                        rs.getString("MaKhachHang"),
+                        rs.getInt("MaNhanVien"),
+                        rs.getInt("SoLuong"),
+                        rs.getDate("NgayBan"),
+                        rs.getDouble("ThanhTien")
+                    };
+                    model.addRow(row);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
