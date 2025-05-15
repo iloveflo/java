@@ -55,8 +55,7 @@ public class Menu extends javax.swing.JFrame {
         btnMathangbanchay.addActionListener(e -> showPanel(new Mathangbanchay()));
         btnMathangsaphet.addActionListener(e -> showPanel(new Mathangsaphet()));
     }
-
-     private void capNhatDangNhap() {
+    private void capNhatDangNhap() {
         try (Connection conn = ketnoiCSDL.getConnection()) {
             String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -107,7 +106,6 @@ public class Menu extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         panelHienthi = new javax.swing.JPanel();
-
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -230,6 +228,8 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel5.setText("--Nơi tìm ra chính bản thân bạn,fong cách của bạn--");
+
+        panelHienthi.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         javax.swing.GroupLayout panelHienthiLayout = new javax.swing.GroupLayout(panelHienthi);
         panelHienthi.setLayout(panelHienthiLayout);

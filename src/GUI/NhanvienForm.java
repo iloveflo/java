@@ -4,7 +4,6 @@
  */
 package GUI;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.awt.event.WindowAdapter;
@@ -13,6 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import BackEnd.*;
+
+
 /**
  *
  * @author Neo 16
@@ -48,6 +49,7 @@ public class NhanvienForm extends javax.swing.JFrame {
         btnSanphamsaphet.addActionListener(e -> showPanel(new Mathangsaphet()));
         btnXemdondathang.addActionListener(e -> showPanel(new Nhanvienlaphoadon()));
         btnXemhoadonban.addActionListener(e -> showPanel(new Hoadonban()));
+        btnDsachSanpham.addActionListener(e -> showPanel(new NVdanhsachsPham()));
 
     }
 
@@ -95,6 +97,7 @@ public class NhanvienForm extends javax.swing.JFrame {
         btnDoimatkhau = new javax.swing.JButton();
         btnSanphamsaphet = new javax.swing.JButton();
         btnXemhoadonban = new javax.swing.JButton();
+        btnXemtaikhoan = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -141,6 +144,8 @@ public class NhanvienForm extends javax.swing.JFrame {
 
         btnXemhoadonban.setText("Xem hóa đơn bán");
 
+        btnXemtaikhoan.setText("Xem thông tin tài khoản");
+
         javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
         sidePanelLayout.setHorizontalGroup(
@@ -168,7 +173,8 @@ public class NhanvienForm extends javax.swing.JFrame {
                     .addComponent(btnDsachSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnXemdondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSanphamsaphet, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnXemhoadonban, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnXemhoadonban, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnXemtaikhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         sidePanelLayout.setVerticalGroup(
@@ -191,7 +197,9 @@ public class NhanvienForm extends javax.swing.JFrame {
                 .addComponent(btnXemdondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnXemhoadonban, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 245, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 192, Short.MAX_VALUE)
+                .addComponent(btnXemtaikhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnDoimatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnDangxuat, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -209,6 +217,8 @@ public class NhanvienForm extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 51, 51));
         jLabel6.setText("KHÁCH HÀNG LÀ THƯỢNG ĐẾ");
+
+        panelHienthi.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         javax.swing.GroupLayout panelHienthiLayout = new javax.swing.GroupLayout(panelHienthi);
         panelHienthi.setLayout(panelHienthiLayout);
@@ -319,6 +329,7 @@ public class NhanvienForm extends javax.swing.JFrame {
     private javax.swing.JButton btnSanphamsaphet;
     private javax.swing.JButton btnXemdondathang;
     private javax.swing.JButton btnXemhoadonban;
+    private javax.swing.JButton btnXemtaikhoan;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
