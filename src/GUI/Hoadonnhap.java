@@ -63,6 +63,17 @@ public class Hoadonnhap extends javax.swing.JPanel {
             DefaultTableModel model = HoaDonNhapService.timKiemHoaDonNhap(soHoaDon, tenNCC);
             tblHoadonnhap.setModel(model);
         });
+
+        btnXuathoadon.addActionListener(e -> {
+            int selectedRow = tblHoadonnhap.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn một hóa đơn để xuất.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            String soHoaDonNhap = tblHoadonnhap.getValueAt(selectedRow, 0).toString();
+            HoaDonNhapService.xuat(soHoaDonNhap);
+        });
     }
 
     private void loadNhaCungCap() {

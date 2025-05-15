@@ -1,12 +1,25 @@
 package BackEnd;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.sql.Date;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat; 
+import org.apache.poi.ss.usermodel.Row;
+import java.awt.Desktop;
 
-import java.sql.Statement; 
 
 public class HoaDonNhapService {
     public static boolean lapHoaDonNhap(int maQuanAo, int maNhanVien, int soLuong, double donGia, double giamGia, String tenNCC) {
@@ -111,7 +124,115 @@ public class HoaDonNhapService {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
         return model;
+    }
+
+     public static void xuat(String soHoaDonNhap) {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+
+            // Truy vấn thông tin chung
+            String sqlHeader = """
+                SELECT hd.SoHoaDonNhap, hd.NgayNhap, hd.TongTien, nv.TenNhanVien
+                FROM hoadonnhap hd
+                JOIN nhanvien nv ON hd.MaNhanVien = nv.MaNhanVien
+                WHERE hd.SoHoaDonNhap = ?
+            """;
+
+            PreparedStatement psHeader = conn.prepareStatement(sqlHeader);
+            psHeader.setString(1, soHoaDonNhap);
+            ResultSet rsHeader = psHeader.executeQuery();
+
+            if (!rsHeader.next()) {
+                JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin hóa đơn.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            String tenNhanVien = rsHeader.getString("TenNhanVien");
+            Date ngayNhap = rsHeader.getDate("NgayNhap");
+            double tongTien = rsHeader.getDouble("TongTien");
+
+            // Truy vấn chi tiết
+            String sqlDetails = """
+                SELECT 
+                    sp.TenQuanAo AS `Tên quần áo`,
+                    cthdn.SoLuong AS `Số lượng`,
+                    cthdn.DonGia AS `Đơn giá`,
+                    cthdn.GiamGia AS `Giảm giá (%)`,
+                    cthdn.ThanhTien AS `Thành tiền`
+                FROM chitiethoadonnhap cthdn
+                JOIN sanpham sp ON cthdn.MaQuanAo = sp.MaQuanAo
+                WHERE cthdn.SoHoaDonNhap = ?
+            """;
+
+            PreparedStatement psDetails = conn.prepareStatement(sqlDetails);
+            psDetails.setString(1, soHoaDonNhap);
+            ResultSet rsDetails = psDetails.executeQuery();
+
+            // Ghi file Excel
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("HoaDonNhap");
+
+            // Tiêu đề
+            Row rowTitle = sheet.createRow(0);
+            Cell titleCell = rowTitle.createCell(0);
+            titleCell.setCellValue("HÓA ĐƠN NHẬP");
+            CellStyle styleTitle = workbook.createCellStyle();
+            Font fontTitle = workbook.createFont();
+            fontTitle.setFontHeightInPoints((short) 16);
+            fontTitle.setBold(true);
+            styleTitle.setFont(fontTitle);
+            titleCell.setCellStyle(styleTitle);
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 4));
+
+            // Thông tin chung
+            String[][] info = {
+                {"Số HĐ:", soHoaDonNhap},
+                {"Ngày nhập:", new SimpleDateFormat("dd/MM/yyyy").format(ngayNhap)},
+                {"Nhân viên:", tenNhanVien},
+                {"Tổng tiền:", String.format("%,.0f đ", tongTien)}
+            };
+
+            for (int i = 0; i < info.length; i++) {
+                Row row = sheet.createRow(2 + i);
+                row.createCell(0).setCellValue(info[i][0]);
+                row.createCell(1).setCellValue(info[i][1]);
+            }
+
+            // Header bảng chi tiết
+            Row rowHeader = sheet.createRow(7);
+            String[] columns = {"Tên quần áo", "Số lượng", "Đơn giá", "Giảm giá (%)", "Thành tiền"};
+            for (int i = 0; i < columns.length; i++) {
+                rowHeader.createCell(i).setCellValue(columns[i]);
+            }
+
+            int rowIndex = 8;
+            while (rsDetails.next()) {
+                Row row = sheet.createRow(rowIndex++);
+                for (int i = 0; i < columns.length; i++) {
+                    row.createCell(i).setCellValue(rsDetails.getString(i + 1));
+                }
+            }
+
+            for (int i = 0; i < columns.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Ghi file
+            String folderPath = "D:/ProjectJava";
+            new File(folderPath).mkdirs();
+            String filePath = folderPath + "/HoaDonNhap_" + soHoaDonNhap + ".xlsx";
+
+            try (FileOutputStream out = new FileOutputStream(filePath)) {
+                workbook.write(out);
+            }
+            workbook.close();
+
+            Desktop.getDesktop().open(new File(filePath));
+            JOptionPane.showMessageDialog(null, "Xuất hóa đơn thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi khi xuất hóa đơn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
