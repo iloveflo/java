@@ -56,6 +56,7 @@ public class RegisterService {
         mainForm.setVisible(true);
         currentFrame.dispose();
     }
+    
     public static void togglePasswordVisibility(JPasswordField passwordField, JCheckBox checkBox) {
         if (checkBox.isSelected()) {
             passwordField.setEchoChar((char) 0); // Hiện mật khẩu

@@ -1,10 +1,10 @@
 package BackEnd;
 
 import javax.swing.*;
-
+import java.awt.*;
 import GUI.Quenmatkhau;
-
 import java.sql.*;
+import java.util.Random;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -12,7 +12,56 @@ import java.awt.event.ItemListener;
 
 
 public class AuthService {
-    public static void handleLogin(String username, String password, JFrame parentFrame) {
+    private static int currentCaptchaId = -1;
+    private static String currentCaptchaCode = "";
+    private static final Random random = new Random();
+
+    public static void loadRandomCaptcha(JLabel lblCaptchaImage) {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String countQuery = "SELECT COUNT(*) FROM CapCha";
+            try (PreparedStatement countStmt = conn.prepareStatement(countQuery);
+                 ResultSet countRs = countStmt.executeQuery()) {
+
+                if (countRs.next()) {
+                    int count = countRs.getInt(1);
+                    if (count == 0) {
+                        JOptionPane.showMessageDialog(null, "Không có CAPTCHA nào trong cơ sở dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    int randomIndex = random.nextInt(count);
+
+                    String query = "SELECT MaAnh, LinkAnh, KetQua FROM CapCha LIMIT ?, 1";
+                    try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                        stmt.setInt(1, randomIndex);
+                        try (ResultSet rs = stmt.executeQuery()) {
+                            if (rs.next()) {
+                                currentCaptchaId = rs.getInt("MaAnh");
+                                currentCaptchaCode = rs.getString("KetQua");
+                                String linkAnh = rs.getString("LinkAnh");
+                                lblCaptchaImage.setIcon(new ImageIcon(new ImageIcon(linkAnh).getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH)));
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Lỗi load CAPTCHA: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void changeCaptcha(JLabel lblCaptchaImage) {
+        int previousId = currentCaptchaId;
+        do {
+            loadRandomCaptcha(lblCaptchaImage);
+        } while (currentCaptchaId == previousId);
+    }
+
+    public static boolean checkcapcha(JTextField txtCaptcha){
+        String captchaInput = txtCaptcha.getText();
+        return captchaInput.equals(currentCaptchaCode);
+    }
+
+    public static void handleLogin(String username, String password, JFrame parentFrame,JTextField capcha) {
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(parentFrame, "Hãy nhập đầy đủ thông tin", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
@@ -20,6 +69,7 @@ public class AuthService {
 
         try (Connection conn = ketnoiCSDL.getConnection()) {
             String sql = "SELECT MaTaiKhoan, LoaiTaiKhoan, DangNhap FROM TaiKhoan WHERE TenDangNhap = ? AND MatKhau = ?";
+
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, username);
                 stmt.setString(2, password);
@@ -32,6 +82,11 @@ public class AuthService {
 
                     if (dangNhap) {
                         JOptionPane.showMessageDialog(null, "Tài khoản đang đăng nhập ở thiết bị khác!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+
+                    if(!checkcapcha(capcha)){
+                        JOptionPane.showMessageDialog(parentFrame, "Sai mã bảo vệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
@@ -78,10 +133,10 @@ public class AuthService {
             JOptionPane.showMessageDialog(parentFrame, "Lỗi kết nối: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-    public static void addLoginEvents(JFrame parentFrame, JButton btnLogin, JCheckBox cboxRemember, JPasswordField txtPass, JTextField txtUser, JButton btnRegister, JButton btnQuenmatkhau) {
+    public static void addLoginEvents(JFrame parentFrame, JButton btnLogin, JCheckBox cboxRemember, JPasswordField txtPass, JTextField txtUser, JButton btnRegister, JButton btnQuenmatkhau,JTextField txtCapcha) {
         btnLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                handleLogin(txtUser.getText(), String.valueOf(txtPass.getPassword()), parentFrame);
+                handleLogin(txtUser.getText(), String.valueOf(txtPass.getPassword()), parentFrame,txtCapcha);
             }
         });
         parentFrame.getRootPane().setDefaultButton(btnLogin); // ấn enter để đăng nhập
