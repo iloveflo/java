@@ -24,7 +24,7 @@ public class Menu extends javax.swing.JFrame {
      */
     public Menu() {
         initComponents();
-        mainPanel.setLayout(new BorderLayout());
+        panelHienthi.setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
         addWindowListener(new WindowAdapter() {
             @Override
@@ -51,9 +51,12 @@ public class Menu extends javax.swing.JFrame {
         btnSanpham.addActionListener(e -> showPanel(new Sanpham()));
         btnHoadonmuaban.addActionListener(e -> showPanel(new Hoadonban()));
         btnHoadonnhap.addActionListener(e -> showPanel(new Hoadonnhap()));
+        btnDoanhthu.addActionListener(e -> showPanel(new Thongke()));
+        btnMathangbanchay.addActionListener(e -> showPanel(new Mathangbanchay()));
+        btnMathangsaphet.addActionListener(e -> showPanel(new Mathangsaphet()));
     }
 
-    private void capNhatDangNhap() {
+     private void capNhatDangNhap() {
         try (Connection conn = ketnoiCSDL.getConnection()) {
             String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -71,10 +74,10 @@ public class Menu extends javax.swing.JFrame {
     }
 
      private void showPanel(JPanel panel) {
-        mainPanel.removeAll();         // Xoá panel cũ
-        mainPanel.add(panel, BorderLayout.CENTER); // Thêm panel mới
-        mainPanel.revalidate();        // Cập nhật layout
-        mainPanel.repaint();           // Vẽ lại
+        panelHienthi.removeAll();         // Xoá panel cũ
+        panelHienthi.add(panel, BorderLayout.CENTER); // Thêm panel mới
+        panelHienthi.revalidate();        // Cập nhật layout
+        panelHienthi.repaint();           // Vẽ lại
     }
 
     /**
@@ -98,10 +101,13 @@ public class Menu extends javax.swing.JFrame {
         btnHoadonmuaban = new javax.swing.JButton();
         btnDoimatkhau = new javax.swing.JButton();
         btnHoadonnhap = new javax.swing.JButton();
+        btnMathangsaphet = new javax.swing.JButton();
+        btnMathangbanchay = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        panelHienthi = new javax.swing.JPanel();
+
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -143,6 +149,11 @@ public class Menu extends javax.swing.JFrame {
 
         btnHoadonnhap.setText("Hóa đơn nhập");
 
+        btnMathangsaphet.setText("Mặt hàng sắp hết");
+        btnMathangsaphet.setActionCommand("Mặt hàng bán chạy");
+
+        btnMathangbanchay.setText("Mặt hàng bán chạy");
+
         javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
         sidePanelLayout.setHorizontalGroup(
@@ -172,7 +183,9 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(btnSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDoanhthu, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnHoadonmuaban, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHoadonnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnHoadonnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMathangsaphet, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMathangbanchay, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         sidePanelLayout.setVerticalGroup(
@@ -199,12 +212,17 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(btnHoadonmuaban, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnHoadonnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(btnMathangbanchay, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnMathangsaphet, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
                 .addComponent(btnDoimatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnDangxuat, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
         );
+
         mainPanel.setBackground(new java.awt.Color(200, 173, 127));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
@@ -213,14 +231,14 @@ public class Menu extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel5.setText("--Nơi tìm ra chính bản thân bạn,fong cách của bạn--");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelHienthiLayout = new javax.swing.GroupLayout(panelHienthi);
+        panelHienthi.setLayout(panelHienthiLayout);
+        panelHienthiLayout.setHorizontalGroup(
+            panelHienthiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panelHienthiLayout.setVerticalGroup(
+            panelHienthiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
@@ -238,7 +256,7 @@ public class Menu extends javax.swing.JFrame {
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(54, 54, 54)))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelHienthi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,7 +266,7 @@ public class Menu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(panelHienthi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -258,7 +276,7 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -314,12 +332,14 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton btnHoadonmuaban;
     private javax.swing.JButton btnHoadonnhap;
     private javax.swing.JButton btnKhachhang;
+    private javax.swing.JButton btnMathangbanchay;
+    private javax.swing.JButton btnMathangsaphet;
     private javax.swing.JButton btnNhanvien;
     private javax.swing.JButton btnSanpham;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JPanel panelHienthi;
     private javax.swing.JLayeredPane profilePic;
     private javax.swing.JPanel sidePanel;
     private javax.swing.JLabel txtChucvu;

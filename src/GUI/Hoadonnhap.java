@@ -11,6 +11,7 @@ import BackEnd.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+
 /**
  *
  * @author Neo 16
@@ -52,20 +53,6 @@ public class Hoadonnhap extends javax.swing.JPanel {
         
                 Object giamgia = tblHoadonnhap.getValueAt(selectedRow, 6);
                 txtGiamgia.setText(giamgia != null ? giamgia.toString() : "");
-            }
-        });
-        btnLaphoadon.addActionListener(e -> {
-            int maQuanAo = Integer.parseInt(txtMaquanao.getText());
-            int maNhanVien = Integer.parseInt(txtManhanvien.getText());
-            int soLuong = Integer.parseInt(txtSoluongnhap.getText());
-            double donGia = Double.parseDouble(txtDongia.getText());
-            double giamGia = Double.parseDouble(txtGiamgia.getText());
-            String tenNCC = boxNhacungcap.getSelectedItem().toString();
-        
-            boolean result = HoaDonNhapService.lapHoaDonNhap(maQuanAo, maNhanVien, soLuong, donGia, giamGia, tenNCC);
-            if (result) {
-                JOptionPane.showMessageDialog(null, "Lập hóa đơn thành công!");
-                loadHoaDonNhapData();
             }
         });
         btnTimkiem.addActionListener(e -> {
@@ -131,7 +118,6 @@ public class Hoadonnhap extends javax.swing.JPanel {
         }
     }
 
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -155,13 +141,12 @@ public class Hoadonnhap extends javax.swing.JPanel {
         txtGiamgia = new javax.swing.JTextField();
         txtSoluongnhap = new javax.swing.JTextField();
         txtSohoadonnhap = new javax.swing.JTextField();
-        btnLaphoadon = new javax.swing.JButton();
+        btnXuathoadon = new javax.swing.JButton();
         btnTimkiem = new javax.swing.JButton();
         txtManhanvien = new javax.swing.JTextField();
         lblManhanvien = new javax.swing.JLabel();
         lblSohoadonnhap1 = new javax.swing.JLabel();
         boxNhacungcap = new javax.swing.JComboBox<>();
-        btnLammoi = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(200, 173, 127));
 
@@ -194,8 +179,8 @@ public class Hoadonnhap extends javax.swing.JPanel {
         lblSoluongnhap.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblSoluongnhap.setText("Số lượng nhập:");
 
-        btnLaphoadon.setText("Lập hóa đơn");
-        btnLaphoadon.addActionListener(new java.awt.event.ActionListener() {
+        btnXuathoadon.setText("Xuất hóa đơn");
+        btnXuathoadon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXuathoadonActionPerformed(evt);
             }
@@ -210,13 +195,6 @@ public class Hoadonnhap extends javax.swing.JPanel {
         lblSohoadonnhap1.setText("Số hóa đơn nhập:");
 
         boxNhacungcap.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        btnLammoi.setText("Làm mới");
-        btnLammoi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLammoiActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -257,16 +235,14 @@ public class Hoadonnhap extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(310, 310, 310)
-                        .addComponent(btnLaphoadon, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(130, 130, 130)
-                        .addComponent(btnLammoi, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(298, 298, 298)
                         .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(66, 66, 66)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 832, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 832, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(400, 400, 400)
+                        .addComponent(btnXuathoadon, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(77, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -308,13 +284,11 @@ public class Hoadonnhap extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblSoluongnhap)
                             .addComponent(txtSoluongnhap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLammoi, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLaphoadon, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnXuathoadon, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -335,16 +309,11 @@ public class Hoadonnhap extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnXuathoadonActionPerformed
 
-    private void btnLammoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLammoiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnLammoiActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> boxNhacungcap;
-    private javax.swing.JButton btnLammoi;
     private javax.swing.JButton btnTimkiem;
-    private javax.swing.JButton btnLaphoadon;
+    private javax.swing.JButton btnXuathoadon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
