@@ -159,7 +159,7 @@ public class Hoadonnhap extends javax.swing.JPanel {
         lblSohoadonnhap1 = new javax.swing.JLabel();
         boxNhacungcap = new javax.swing.JComboBox<>();
 
-        jPanel1.setBackground(new java.awt.Color(200, 173, 127));
+        jPanel1.setBackground(new java.awt.Color(173, 216, 230));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("DANH SÁCH HÓA ĐƠN NHẬP");

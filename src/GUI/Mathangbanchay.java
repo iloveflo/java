@@ -146,7 +146,7 @@ public class Mathangbanchay extends javax.swing.JPanel {
         txtAnh = new javax.swing.JTextField();
         Anh = new javax.swing.JPanel();
 
-        jPanel1.setBackground(new java.awt.Color(200, 173, 127));
+        jPanel1.setBackground(new java.awt.Color(173, 216, 230));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("DANH SÁCH MẶT HÀNG BÁN CHẠY");

@@ -194,7 +194,7 @@ public class Thongke extends javax.swing.JPanel {
         lblLoinhuan = new javax.swing.JLabel();
         cbThang = new javax.swing.JComboBox<>();
 
-        jPanel1.setBackground(new java.awt.Color(200, 173, 127));
+        jPanel1.setBackground(new java.awt.Color(173, 216, 230));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("THỐNG KÊ DOANH THU");

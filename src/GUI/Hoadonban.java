@@ -151,7 +151,7 @@ public class Hoadonban extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(980, 600));
 
-        jPanel1.setBackground(new java.awt.Color(200, 173, 127));
+        jPanel1.setBackground(new java.awt.Color(173, 216, 230));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("DANH SÁCH HÓA ĐƠN BÁN");
