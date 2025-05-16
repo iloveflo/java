@@ -5,7 +5,6 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -91,7 +90,7 @@ public class HoaDonBanService {
                 }
 
                 String fileName = "HoaDon_" + soHoaDon.replaceAll("[^a-zA-Z0-9]", "_") + ".xlsx";
-                String filePath = "D:\\ProjectJava\\ClothingStore\\" + fileName;
+                String filePath = "D:\\ProjectJava\\" + fileName;
                 try (FileOutputStream fos = new FileOutputStream(filePath)) {
                     wb.write(fos);
                 }

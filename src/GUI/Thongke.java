@@ -4,14 +4,15 @@
  */
 package GUI;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import BackEnd.*;
+import java.awt.Desktop;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -44,33 +45,8 @@ public class Thongke extends javax.swing.JPanel {
             }
         });
 
-        cbThang.addActionListener(e -> {
-            String thangChon = cbThang.getSelectedItem().toString(); // ví dụ "5"
-            locBangTheoThang(thangChon);
-        });
+        btnXuatbaocao.addActionListener(evt -> btnXuatbaocaoActionPerformed(evt));
     }
-
-    public void locBangTheoThang(String thangChon) {
-        DefaultTableModel model = (DefaultTableModel) tblThongke.getModel();
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-        tblThongke.setRowSorter(sorter);
-
-        // Lọc theo cột 0 (cột "Tháng") với dữ liệu kiểu "5/2024"
-        RowFilter<DefaultTableModel, Object> filter = new RowFilter<DefaultTableModel, Object>() {
-            @Override
-            public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
-                String value = entry.getStringValue(0); // lấy giá trị cột "Tháng"
-                String[] parts = value.split("/");
-                if (parts.length == 2) {
-                    return parts[0].trim().equals(thangChon); // so sánh tháng
-                }
-                return false;
-            }
-        };
-
-        sorter.setRowFilter(filter);
-    }
-
 
     public void loadDoanhThuTheoThang() {
     DefaultTableModel model = (DefaultTableModel) tblThongke.getModel();
@@ -171,6 +147,25 @@ public class Thongke extends javax.swing.JPanel {
     }
 }
 
+private void btnXuatbaocaoActionPerformed(java.awt.event.ActionEvent evt) {
+    String folderPath = "D:\\ProjectJava";
+    String filePath = folderPath + "\\BaoCaoDoanhThu.xlsx";
+
+    try {
+        File dir = new File(folderPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        ThongkeService.xuatBaoCao(tblThongke, filePath);
+        Desktop.getDesktop().open(new File(filePath));
+        JOptionPane.showMessageDialog(null, "Xuất báo cáo thành công!\nFile đã lưu tại:\n" + filePath, "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Lỗi khi xuất Excel: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -180,7 +175,7 @@ public class Thongke extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -193,6 +188,7 @@ public class Thongke extends javax.swing.JPanel {
         txtLoinhuan = new javax.swing.JTextField();
         lblLoinhuan = new javax.swing.JLabel();
         cbThang = new javax.swing.JComboBox<>();
+        btnXuatbaocao= new JButton();
 
         jPanel1.setBackground(new java.awt.Color(173, 216, 230));
 
@@ -203,9 +199,14 @@ public class Thongke extends javax.swing.JPanel {
             new Object [][] {
             },
             new String [] {
-                "Tháng", "Số lượng đã bán", "Tổng Doanh thu", "Tổng lợi nhuận"
+                "Tháng/Năm", "Số lượng đã bán", "Tổng Doanh thu", "Tổng lợi nhuận"
             }
         ));
+
+        btnXuatbaocao.setBounds(390, 510, 120, 50);
+        jPanel1.add(btnXuatbaocao);
+        btnXuatbaocao.setText("Xuất báo cáo");
+
         jScrollPane1.setViewportView(tblThongke);
 
         lblThang.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -306,5 +307,6 @@ public class Thongke extends javax.swing.JPanel {
     private javax.swing.JTextField txtDoanhthu;
     private javax.swing.JTextField txtLoinhuan;
     private javax.swing.JTextField txtSoluong;
+    private javax.swing.JButton btnXuatbaocao;
     // End of variables declaration//GEN-END:variables
 }
