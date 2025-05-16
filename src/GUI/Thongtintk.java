@@ -4,6 +4,16 @@
  */
 package GUI;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import BackEnd.*;
+
 /**
  *
  * @author Neo 16
@@ -15,6 +25,210 @@ public class Thongtintk extends javax.swing.JFrame {
      */
     public Thongtintk() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                capNhatDangNhapVaThoat();
+            }
+        });
+        loadThongTinTaiKhoan();
+        btnThoat.addActionListener(e -> {
+            String loaiTaiKhoan = SessionManager.getLoaiTaiKhoan();
+            if ("KhachHang".equals(loaiTaiKhoan)) {
+                new KhachhangForm().setVisible(true);
+                dispose(); // ẩn hoặc đóng frame hiện tại
+            } else if ("NhanVien".equals(loaiTaiKhoan)) {
+                new NhanvienForm().setVisible(true);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Loại tài khoản không hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        btnSua.addActionListener(e -> {
+            txtHovaten.setEnabled(true);
+            txtSDT.setEnabled(true);
+            txtEmail.setEnabled(true);
+            txtDiachi.setEnabled(true);
+
+            btnLuu.setEnabled(true);
+            btnHuy.setEnabled(true);
+            btnSua.setEnabled(false);
+        });
+
+        btnHuy.addActionListener(e -> {
+            loadThongTinTaiKhoan();
+
+            // Vô hiệu hóa các ô nhập
+            txtHovaten.setEnabled(false);
+            txtSDT.setEnabled(false);
+            txtEmail.setEnabled(false);
+            txtDiachi.setEnabled(false);
+
+            btnLuu.setEnabled(false);
+            btnHuy.setEnabled(false);
+            btnSua.setEnabled(true);
+        });
+
+        btnLuu.addActionListener(e -> {
+            String maTK = txtMatk.getText().trim();
+            String email = txtEmail.getText().trim();
+            String sdt = txtSDT.getText().trim();
+            String hoten = txtHovaten.getText().trim();
+            String diachi = txtDiachi.getText().trim();
+
+            try (Connection conn = ketnoiCSDL.getConnection()) {
+                // Kiểm tra trùng email hoặc SDT (trừ chính mình)
+                String queryCheck = """
+                    SELECT COUNT(*) FROM (
+                        SELECT Email FROM nhanvien WHERE Email = ? AND MaTaiKhoan != ?
+                        UNION ALL
+                        SELECT Email FROM khachhang WHERE Email = ? AND MaTaiKhoan != ?
+                        UNION ALL
+                        SELECT SoDienThoai FROM nhanvien WHERE SoDienThoai = ? AND MaTaiKhoan != ?
+                        UNION ALL
+                        SELECT SoDienThoai FROM khachhang WHERE SoDienThoai = ? AND MaTaiKhoan != ?
+                    ) AS Duplicates
+                """;
+                try (PreparedStatement psCheck = conn.prepareStatement(queryCheck)) {
+                    psCheck.setString(1, email);
+                    psCheck.setString(2, maTK);
+                    psCheck.setString(3, email);
+                    psCheck.setString(4, maTK);
+                    psCheck.setString(5, sdt);
+                    psCheck.setString(6, maTK);
+                    psCheck.setString(7, sdt);
+                    psCheck.setString(8, maTK);
+
+                    ResultSet rs = psCheck.executeQuery();
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        JOptionPane.showMessageDialog(null, "Email hoặc số điện thoại đã tồn tại.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                }
+
+                // Lấy loại tài khoản
+                String loai = "";
+                try (PreparedStatement psLoai = conn.prepareStatement("SELECT LoaiTaiKhoan FROM taikhoan WHERE MaTaiKhoan = ?")) {
+                    psLoai.setString(1, maTK);
+                    ResultSet rsLoai = psLoai.executeQuery();
+                    if (rsLoai.next()) {
+                        loai = rsLoai.getString("LoaiTaiKhoan");
+                    }
+                }
+
+                // Cập nhật dữ liệu
+                String queryUpdate = "";
+                if ("NhanVien".equals(loai)) {
+                    queryUpdate = "UPDATE nhanvien SET TenNhanVien = ?, SoDienThoai = ?, Email = ?, DiaChi = ? WHERE MaTaiKhoan = ?";
+                } else if ("KhachHang".equals(loai)) {
+                    queryUpdate = "UPDATE khachhang SET TenKhach = ?, SoDienThoai = ?, Email = ?, DiaChi = ? WHERE MaTaiKhoan = ?";
+                }
+
+                if (!queryUpdate.isEmpty()) {
+                    try (PreparedStatement psUpdate = conn.prepareStatement(queryUpdate)) {
+                        psUpdate.setString(1, hoten);
+                        psUpdate.setString(2, sdt);
+                        psUpdate.setString(3, email);
+                        psUpdate.setString(4, diachi);
+                        psUpdate.setString(5, maTK);
+
+                        int result = psUpdate.executeUpdate();
+                        if (result > 0) {
+                            JOptionPane.showMessageDialog(null, "Cập nhật thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                            btnHuy.doClick(); // Gọi lại sự kiện Hủy để reload lại
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Không có dữ liệu nào được cập nhật.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật thông tin: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    }
+
+    private void capNhatDangNhap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, SessionManager.getMaTaiKhoan());
+            stmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void capNhatDangNhapVaThoat() {
+        capNhatDangNhap();
+        SessionManager.clearSession();
+        System.exit(0);
+    }
+
+    private void loadThongTinTaiKhoan() {
+        String maTaiKhoan = SessionManager.getMaTaiKhoan();
+        if (maTaiKhoan == null || maTaiKhoan.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Không tìm thấy mã tài khoản đăng nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String tenDangNhap = "";
+            String loaiTaiKhoan = "";
+
+            // Lấy thông tin đăng nhập
+            String queryTaiKhoan = "SELECT TenDangNhap, LoaiTaiKhoan FROM taikhoan WHERE MaTaiKhoan = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(queryTaiKhoan)) {
+                stmt.setString(1, maTaiKhoan);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    tenDangNhap = rs.getString("TenDangNhap");
+                    loaiTaiKhoan = rs.getString("LoaiTaiKhoan");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Tài khoản không tồn tại trong hệ thống!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+
+            // Truy vấn thông tin người dùng theo loại tài khoản
+            String queryThongTin;
+            if (loaiTaiKhoan.equals("NhanVien")) {
+                queryThongTin = "SELECT TenNhanVien AS Ten, SoDienThoai, Email, DiaChi, MaTaiKhoan FROM nhanvien WHERE MaTaiKhoan = ? LIMIT 1";
+            } else if (loaiTaiKhoan.equals("KhachHang")) {
+                queryThongTin = "SELECT TenKhach AS Ten, SoDienThoai, Email, DiaChi, MaTaiKhoan FROM khachhang WHERE MaTaiKhoan = ? LIMIT 1";
+            } else {
+                JOptionPane.showMessageDialog(null, "Loại tài khoản không hợp lệ hoặc chưa hỗ trợ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try (PreparedStatement stmt = conn.prepareStatement(queryThongTin)) {
+                stmt.setString(1, maTaiKhoan);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    txtHovaten.setText(rs.getString("Ten"));
+                    txtSDT.setText(rs.getString("SoDienThoai"));
+                    txtEmail.setText(rs.getString("Email"));
+                    txtDiachi.setText(rs.getString("DiaChi"));
+                    txtTentk.setText(tenDangNhap);
+                    txtMatk.setText(rs.getString("MaTaiKhoan"));
+
+                    // Disable fields sau khi load
+                    txtHovaten.setEnabled(false);
+                    txtSDT.setEnabled(false);
+                    txtEmail.setEnabled(false);
+                    txtDiachi.setEnabled(false);
+                    txtTentk.setEnabled(false);
+                    txtMatk.setEnabled(false);
+                    btnLuu.setEnabled(false);
+                    btnHuy.setEnabled(false);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin người dùng.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Lỗi khi truy vấn dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**

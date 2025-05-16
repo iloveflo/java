@@ -4,6 +4,14 @@
  */
 package GUI;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import BackEnd.*;
 
 /**
  *
@@ -16,6 +24,57 @@ public class KhachhangForm extends javax.swing.JFrame {
      */
     public KhachhangForm() {
         initComponents();
+        panelHienthi.setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Ngăn đóng mặc định
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                capNhatDangNhapVaThoat();
+            }
+        });
+
+         btnDangxuat.addActionListener(e -> {
+            capNhatDangNhap();
+            SessionManager.clearSession();
+            new Start().setVisible(true);
+            dispose();
+        });
+
+        btnDoimatkhau.addActionListener(e -> {
+            capNhatDangNhap();
+            SessionManager.clearSession();
+            new Doimatkhau().setVisible(true);
+            dispose();
+        });
+        
+        btnXemtaikhoan.addActionListener(e -> {
+            new Thongtintk().setVisible(true);
+            dispose();
+        });
+        
+    }
+    private void capNhatDangNhap() {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+            String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, SessionManager.getMaTaiKhoan());
+            stmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void capNhatDangNhapVaThoat() {
+        capNhatDangNhap();
+        SessionManager.clearSession();
+        System.exit(0);
+    }
+
+     private void showPanel(JPanel panel) {
+        panelHienthi.removeAll();         // Xoá panel cũ
+        panelHienthi.add(panel, BorderLayout.CENTER); // Thêm panel mới
+        panelHienthi.revalidate();        // Cập nhật layout
+        panelHienthi.repaint();           // Vẽ lại
     }
 
     /**
@@ -37,7 +96,7 @@ public class KhachhangForm extends javax.swing.JFrame {
         btnDangxuat = new javax.swing.JButton();
         btnDoimatkhau = new javax.swing.JButton();
         btnHoadondathang = new javax.swing.JButton();
-        btnXemtailkhoan = new javax.swing.JButton();
+        btnXemtaikhoan = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -78,7 +137,7 @@ public class KhachhangForm extends javax.swing.JFrame {
 
         btnHoadondathang.setText("Hóa đơn đặt hàng");
 
-        btnXemtailkhoan.setText("Xem thông tin tài khoản");
+        btnXemtaikhoan.setText("Xem thông tin tài khoản");
 
         javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
@@ -110,7 +169,7 @@ public class KhachhangForm extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(sidePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnXemtailkhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnXemtaikhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         sidePanelLayout.setVerticalGroup(
@@ -134,7 +193,7 @@ public class KhachhangForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnHoadondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnXemtailkhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnXemtaikhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnDoimatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -253,7 +312,7 @@ public class KhachhangForm extends javax.swing.JFrame {
     private javax.swing.JButton btnHoadondathang;
     private javax.swing.JButton btnSanpham;
     private javax.swing.JButton btnXemgiohang;
-    private javax.swing.JButton btnXemtailkhoan;
+    private javax.swing.JButton btnXemtaikhoan;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel mainPanel;
