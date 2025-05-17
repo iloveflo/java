@@ -2,19 +2,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.oopjava;
+package GUI;
+
+import BackEnd.SessionManager;
 
 /**
  *
  * @author Neo 16
  */
-public class Lienhehotro1 extends javax.swing.JFrame {
+public class Lienhehotro extends javax.swing.JFrame {
 
     /**
      * Creates new form Lienhehotro1
      */
-    public Lienhehotro1() {
+    public Lienhehotro() {
         initComponents();
+        btnThoat.addActionListener(e -> {
+            String loaiTaiKhoan = SessionManager.getLoaiTaiKhoan();
+
+            if ("KhachHang".equals(loaiTaiKhoan)) {
+                new KhachhangForm().setVisible(true);
+                this.setVisible(false); // Ẩn form hiện tại
+            } else if ("NhanVien".equals(loaiTaiKhoan)) {
+                new NhanvienForm().setVisible(true);
+                this.setVisible(false);
+            }
+        });
     }
 
     /**
@@ -127,20 +140,20 @@ public class Lienhehotro1 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Lienhehotro1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Lienhehotro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Lienhehotro1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Lienhehotro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Lienhehotro1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Lienhehotro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Lienhehotro1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Lienhehotro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Lienhehotro1().setVisible(true);
+                new Lienhehotro().setVisible(true);
             }
         });
     }

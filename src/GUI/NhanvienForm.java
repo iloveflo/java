@@ -51,6 +51,11 @@ public class NhanvienForm extends javax.swing.JFrame {
             dispose();
         });
 
+        btnLienhehotro.addActionListener(e -> {
+            new Lienhehotro().setVisible(true);
+            dispose();
+        });
+
         btnSanphamsaphet.addActionListener(e -> showPanel(new Mathangsaphet()));
         btnXemdondathang.addActionListener(e -> showPanel(new Nhanvienlaphoadon()));
         btnXemhoadonban.addActionListener(e -> showPanel(new Hoadonban()));

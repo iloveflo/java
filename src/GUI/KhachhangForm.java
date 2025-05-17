@@ -33,7 +33,7 @@ public class KhachhangForm extends javax.swing.JFrame {
             }
         });
 
-         btnDangxuat.addActionListener(e -> {
+        btnDangxuat.addActionListener(e -> {
             capNhatDangNhap();
             SessionManager.clearSession();
             new Start().setVisible(true);
@@ -49,6 +49,11 @@ public class KhachhangForm extends javax.swing.JFrame {
         
         btnXemtaikhoan.addActionListener(e -> {
             new Thongtintk().setVisible(true);
+            dispose();
+        });
+
+        btnLienhehotro.addActionListener(e -> {
+            new Lienhehotro().setVisible(true);
             dispose();
         });
     }
