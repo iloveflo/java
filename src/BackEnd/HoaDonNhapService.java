@@ -234,4 +234,88 @@ public class HoaDonNhapService {
             JOptionPane.showMessageDialog(null, "Lỗi khi xuất hóa đơn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public static void lapHoaDonNhap(
+            String maquanao, String dongia, String giamgia, String soluongnhap,
+            String manhanvien, String nhacungcap
+    ) {
+        try (Connection conn = ketnoiCSDL.getConnection()) {
+
+            int maQuanAo = Integer.parseInt(maquanao);
+            int maNhanVien = Integer.parseInt(manhanvien);
+            int soLuongNhap = Integer.parseInt(soluongnhap);
+            double donGiaNhap = Double.parseDouble(dongia);
+            double giamGia = Double.parseDouble(giamgia);
+
+            // Kiểm tra sản phẩm có tồn tại
+            String checkSP = "SELECT COUNT(*) FROM SanPham WHERE MaQuanAo = ?";
+            try (PreparedStatement ps = conn.prepareStatement(checkSP)) {
+                ps.setInt(1, maQuanAo);
+                ResultSet rs = ps.executeQuery();
+                rs.next();
+                if (rs.getInt(1) == 0) {
+                    JOptionPane.showMessageDialog(null, "Sản phẩm không tồn tại!");
+                    return;
+                }
+            }
+
+            // Lấy mã NCC
+            int maNCC = -1;
+            String getMaNCC = "SELECT MaNCC FROM NhaCungCap WHERE TenNCC = ?";
+            try (PreparedStatement ps = conn.prepareStatement(getMaNCC)) {
+                ps.setString(1, nhacungcap);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    maNCC = rs.getInt("MaNCC");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Nhà cung cấp không tồn tại!");
+                    return;
+                }
+            }
+
+            // Cập nhật sản phẩm
+            String updateSP = "UPDATE SanPham SET SoLuong = SoLuong + ?, DonGiaNhap = ? WHERE MaQuanAo = ?";
+            try (PreparedStatement ps = conn.prepareStatement(updateSP)) {
+                ps.setInt(1, soLuongNhap);
+                ps.setDouble(2, donGiaNhap);
+                ps.setInt(3, maQuanAo);
+                ps.executeUpdate();
+            }
+
+            // Thêm Hóa đơn nhập
+            int soHoaDonNhapMoi = -1;
+            String insertHDN = "INSERT INTO HoaDonNhap (MaNhanVien, NgayNhap, MaNCC, TongTien) VALUES (?, NOW(), ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(insertHDN, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setInt(1, maNhanVien);
+                ps.setInt(2, maNCC);
+                ps.setDouble(3, soLuongNhap * donGiaNhap);
+                ps.executeUpdate();
+
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    soHoaDonNhapMoi = rs.getInt(1);
+                }
+            }
+
+            // Thêm chi tiết hóa đơn
+            String insertCT = "INSERT INTO ChiTietHoaDonNhap (SoHoaDonNhap, MaQuanAo, SoLuong, DonGia, GiamGia, ThanhTien) " +
+                              "VALUES (?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(insertCT)) {
+                ps.setInt(1, soHoaDonNhapMoi);
+                ps.setInt(2, maQuanAo);
+                ps.setInt(3, soLuongNhap);
+                ps.setDouble(4, donGiaNhap);
+                ps.setDouble(5, giamGia);
+                double thanhTien = soLuongNhap * donGiaNhap * (1 - giamGia / 100);
+                ps.setDouble(6, thanhTien);
+                ps.executeUpdate();
+            }
+
+            JOptionPane.showMessageDialog(null, "Thêm hóa đơn nhập thành công!");
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage());
+        }
+    }
 }
+

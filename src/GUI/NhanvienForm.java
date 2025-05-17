@@ -55,6 +55,7 @@ public class NhanvienForm extends javax.swing.JFrame {
         btnXemdondathang.addActionListener(e -> showPanel(new Nhanvienlaphoadon()));
         btnXemhoadonban.addActionListener(e -> showPanel(new Hoadonban()));
         btnDsachSanpham.addActionListener(e -> showPanel(new NVdanhsachsPham()));
+        btnXemhoadonnhap.addActionListener(e -> showPanel(new HoadonnhapNV()));
     }
 
      private void capNhatDangNhap() {
