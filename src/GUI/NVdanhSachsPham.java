@@ -27,6 +27,7 @@ public class NVdanhsachsPham extends javax.swing.JPanel {
      */
     public NVdanhsachsPham() {
         initComponents();
+        
         doDuLieuSanPham();
         Sanphamdata.doDuLieuVaoComboBox(boxLoai, "theloai", "TenLoai");
         Sanphamdata.doDuLieuVaoComboBox(boxChatlieu, "chatlieu", "TenChatLieu");

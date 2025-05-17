@@ -3,7 +3,12 @@ package BackEnd;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+
 import javax.swing.JOptionPane;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 
 public class NhanvienData {
     // DTO
@@ -125,7 +130,8 @@ public class NhanvienData {
                 if (rs.next()) {
                     maCongViecID = rs.getInt("MaCongViec");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Không tìm thấy công việc: " + maCongViec);
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy công việc: " + maCongViec +"\n"+
+                                                                        "Vui lòng chọn: Nhân viên bán hàng hoặc Nhân viên thu ngân!!!");
                     return;
                 }
             }
@@ -145,13 +151,55 @@ public class NhanvienData {
 
                 pst.executeUpdate();
                 conn.commit(); // Mọi thứ thành công, xác nhận transaction
-                JOptionPane.showMessageDialog(null, "Thêm nhân viên thành công!");
+                JOptionPane.showMessageDialog(null, "Thêm nhân viên thành công! Thông tin tài khoản đã được gửi tới Email:"+email);
             }
+
+             // Gửi email thông báo tài khoản
+            String subject = "Thông tin tài khoản nhân viên";
+            String message = "Chào " + hoTen + ",\n\n"
+                        + "Tài khoản của bạn đã được tạo:\n"
+                        + "Tên đăng nhập: " + maNV + "\n"
+                        + "Mật khẩu:"+ maNV+"\n"
+                        + "Vui lòng đổi mật khẩu sau khi đăng nhập.\n\n"
+                        + "Trân trọng,\nPhòng Nhân sự";
+
+            sendEmail(email, subject, message);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Lỗi khi thêm nhân viên: " + e.getMessage());
         }
     }
+
+    public static void sendEmail(String toEmail, String subject, String messageText) {
+        final String fromEmail = "binha10k56@gmail.com"; // Email của bạn
+        final String password = "eadb mfdp bgdc qtdt"; // App password (nếu dùng Gmail)
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(fromEmail, password);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(fromEmail));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+            message.setSubject(subject);
+            message.setText(messageText);
+
+            Transport.send(message);
+            System.out.println("Email đã được gửi đến: " + toEmail);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // Hàm kiểm tra tồn tại (1 tham số)
     private static boolean isExist(Connection conn, String query, String value) throws Exception {
