@@ -33,19 +33,13 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-         btnDangxuat.addActionListener(e -> {
+        btnDangxuat.addActionListener(e -> {
             capNhatDangNhap();
             SessionManager.clearSession();
             new Start().setVisible(true);
             dispose();
         });
 
-        btnDoimatkhau.addActionListener(e -> {
-            capNhatDangNhap();
-            SessionManager.clearSession();
-            new Doimatkhau().setVisible(true);
-            dispose();
-        });
         btnKhachhang.addActionListener(e -> showPanel(new Khachhang()));
         btnNhanvien.addActionListener(e -> showPanel(new Nhanvien()));
         btnSanpham.addActionListener(e -> showPanel(new Sanpham()));
@@ -54,7 +48,9 @@ public class Menu extends javax.swing.JFrame {
         btnDoanhthu.addActionListener(e -> showPanel(new Thongke()));
         btnMathangbanchay.addActionListener(e -> showPanel(new Mathangbanchay()));
         btnMathangsaphet.addActionListener(e -> showPanel(new Mathangsaphet()));
+
     }
+
     private void capNhatDangNhap() {
         try (Connection conn = ketnoiCSDL.getConnection()) {
             String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
@@ -98,7 +94,6 @@ public class Menu extends javax.swing.JFrame {
         btnDangxuat = new javax.swing.JButton();
         btnDoanhthu = new javax.swing.JButton();
         btnHoadonmuaban = new javax.swing.JButton();
-        btnDoimatkhau = new javax.swing.JButton();
         btnHoadonnhap = new javax.swing.JButton();
         btnMathangsaphet = new javax.swing.JButton();
         btnMathangbanchay = new javax.swing.JButton();
@@ -143,8 +138,6 @@ public class Menu extends javax.swing.JFrame {
         btnHoadonmuaban.setText("Hóa đơn mua bán");
         btnHoadonmuaban.setActionCommand("Mặt hàng bán chạy");
 
-        btnDoimatkhau.setText("Đổi mật khẩu");
-
         btnHoadonnhap.setText("Hóa đơn nhập");
 
         btnMathangsaphet.setText("Mặt hàng sắp hết");
@@ -165,9 +158,7 @@ public class Menu extends javax.swing.JFrame {
                         .addComponent(txtChucvu)
                         .addContainerGap(110, Short.MAX_VALUE))
                     .addGroup(sidePanelLayout.createSequentialGroup()
-                        .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnDangxuat, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDoimatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnDangxuat, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(sidePanelLayout.createSequentialGroup()
                 .addGap(131, 131, 131)
@@ -214,9 +205,7 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(btnMathangbanchay, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnMathangsaphet, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47)
-                .addComponent(btnDoimatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(100, 100, 100)
                 .addComponent(btnDangxuat, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
         );
@@ -328,7 +317,6 @@ public class Menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangxuat;
     private javax.swing.JButton btnDoanhthu;
-    private javax.swing.JButton btnDoimatkhau;
     private javax.swing.JButton btnHoadonmuaban;
     private javax.swing.JButton btnHoadonnhap;
     private javax.swing.JButton btnKhachhang;

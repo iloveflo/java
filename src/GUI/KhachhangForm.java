@@ -51,8 +51,8 @@ public class KhachhangForm extends javax.swing.JFrame {
             new Thongtintk().setVisible(true);
             dispose();
         });
-        
     }
+
     private void capNhatDangNhap() {
         try (Connection conn = ketnoiCSDL.getConnection()) {
             String sql = "UPDATE taikhoan SET DangNhap = 0 WHERE MaTaiKhoan = ?";
@@ -77,6 +77,7 @@ public class KhachhangForm extends javax.swing.JFrame {
         panelHienthi.repaint();           // Vẽ lại
     }
 
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,8 +96,10 @@ public class KhachhangForm extends javax.swing.JFrame {
         btnXemgiohang = new javax.swing.JButton();
         btnDangxuat = new javax.swing.JButton();
         btnDoimatkhau = new javax.swing.JButton();
-        btnHoadondathang = new javax.swing.JButton();
+        btnHuongdandathang = new javax.swing.JButton();
         btnXemtaikhoan = new javax.swing.JButton();
+        btnLienhehotro = new javax.swing.JButton();
+        btnHuongdanchonsize = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -135,9 +138,13 @@ public class KhachhangForm extends javax.swing.JFrame {
 
         btnDoimatkhau.setText("Đổi mật khẩu");
 
-        btnHoadondathang.setText("Hóa đơn đặt hàng");
+        btnHuongdandathang.setText("Hướng dẫn đặt hàng");
 
         btnXemtaikhoan.setText("Xem thông tin tài khoản");
+
+        btnLienhehotro.setText("Liên hệ hỗ trợ");
+
+        btnHuongdanchonsize.setText("Hướng dẫn chọn size");
 
         javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
@@ -161,16 +168,18 @@ public class KhachhangForm extends javax.swing.JFrame {
                 .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(sidePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnXemtaikhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(sidePanelLayout.createSequentialGroup()
                 .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnXemgiohang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHoadondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnHuongdandathang, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHuongdanchonsize, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLienhehotro, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(sidePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnXemtaikhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         sidePanelLayout.setVerticalGroup(
             sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -190,8 +199,12 @@ public class KhachhangForm extends javax.swing.JFrame {
                 .addComponent(btnXemgiohang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSanpham, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnHoadondathang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnHuongdandathang, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(btnHuongdanchonsize, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnLienhehotro, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnXemtaikhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -309,7 +322,9 @@ public class KhachhangForm extends javax.swing.JFrame {
     private javax.swing.JButton btnDangxuat;
     private javax.swing.JButton btnDathang;
     private javax.swing.JButton btnDoimatkhau;
-    private javax.swing.JButton btnHoadondathang;
+    private javax.swing.JButton btnHuongdanchonsize;
+    private javax.swing.JButton btnHuongdandathang;
+    private javax.swing.JButton btnLienhehotro;
     private javax.swing.JButton btnSanpham;
     private javax.swing.JButton btnXemgiohang;
     private javax.swing.JButton btnXemtaikhoan;
