@@ -56,6 +56,12 @@ public class KhachhangForm extends javax.swing.JFrame {
             new Lienhehotro().setVisible(true);
             dispose();
         });
+
+        btnSanpham.addActionListener(e -> showPanel(new SanphamKH()));
+        btnXemgiohang.addActionListener(e -> showPanel(new Giohang()));
+        btnDathang.addActionListener(e -> {
+            DatHangProcessor.datHang(SessionManager.getMaTaiKhoan());
+        });
     }
 
     private void capNhatDangNhap() {
