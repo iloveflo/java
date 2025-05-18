@@ -117,7 +117,7 @@ public class NhanvienData {
             try (PreparedStatement pstTK = conn.prepareStatement(insertTaiKhoan)) {
                 pstTK.setString(1, maNV);
                 pstTK.setString(2, maNV);
-                pstTK.setString(3, maNV); // Có thể mã hóa mật khẩu tại đây nếu muốn
+                pstTK.setString(3, maNV);
                 pstTK.executeUpdate();
             }
 
@@ -131,7 +131,7 @@ public class NhanvienData {
                     maCongViecID = rs.getInt("MaCongViec");
                 } else {
                     JOptionPane.showMessageDialog(null, "Không tìm thấy công việc: " + maCongViec +"\n"+
-                                                                        "Vui lòng chọn: Nhân viên bán hàng hoặc Nhân viên thu ngân!!!");
+                                                                        "Vui lòng nhập: Nhân viên bán hàng hoặc Nhân viên thu ngân!!!");
                     return;
                 }
             }
@@ -172,7 +172,7 @@ public class NhanvienData {
 
     public static void sendEmail(String toEmail, String subject, String messageText) {
         final String fromEmail = "binha10k56@gmail.com"; // Email của bạn
-        final String password = "eadb mfdp bgdc qtdt"; // App password (nếu dùng Gmail)
+        final String password = ""; // App password (nếu dùng Gmail)
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");

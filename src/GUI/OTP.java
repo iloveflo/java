@@ -4,6 +4,8 @@
  */
 package GUI;
 
+import javax.swing.JFrame;
+
 import BackEnd.OTPService;
 
 /**
@@ -16,9 +18,11 @@ public class OTP extends javax.swing.JFrame {
      * Creates new form Quenmatkhau
      */
     public OTP(String tenDangNhap, String otp) {
+        JFrame parentFrame = new JFrame();
         initComponents();
         OTPService.setData(tenDangNhap, otp);
-    
+        
+        parentFrame.getRootPane().setDefaultButton(btnXacthuc);
         // Gắn sự kiện cho nút Xác thực
         btnXacthuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

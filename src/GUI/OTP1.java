@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import BackEnd.OTP1Service;
@@ -17,7 +18,9 @@ public class OTP1 extends javax.swing.JFrame {
      * Creates new form Quenmatkhau
      */
     public OTP1(String otp, String username, String newPassword) {
+        JFrame parentFrame = new JFrame();
         initComponents();
+        parentFrame.getRootPane().setDefaultButton(btnXacthuc);
          btnXacthuc.addActionListener(e -> {
             String inputOTP = txtOTP.getText().trim();
             OTP1Service service = new OTP1Service();

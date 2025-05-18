@@ -78,19 +78,39 @@ public class GioHangService {
     }
 
     public static void xoaSanPhamKhoiGio(String maQuanAo, String maKhachHang) {
-        String sql = "DELETE FROM GioHang WHERE MaKhachHang = ? AND MaQuanAo = ?";
+        String checkSql = "SELECT TrangThai FROM GioHang WHERE MaKhachHang = ? AND MaQuanAo = ?";
+        String deleteSql = "DELETE FROM GioHang WHERE MaKhachHang = ? AND MaQuanAo = ?";
 
         try (Connection conn = ketnoiCSDL.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+            PreparedStatement checkPst = conn.prepareStatement(checkSql)) {
 
-            pst.setString(1, maKhachHang);
-            pst.setString(2, maQuanAo);
+            // Check trạng thái trước
+            checkPst.setString(1, maKhachHang);
+            checkPst.setString(2, maQuanAo);
+            try (ResultSet rs = checkPst.executeQuery()) {
+                if (rs.next()) {
+                    int trangThai = rs.getInt("TrangThai");
+                    if (trangThai != 0) {
+                        JOptionPane.showMessageDialog(null, "Không thể xóa sản phẩm đã được đặt (trạng thái khác 0)!");
+                        return; // Dừng không xóa
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm trong giỏ hàng để xóa.");
+                    return; // Dừng không xóa
+                }
+            }
 
-            int rowsAffected = pst.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Xóa sản phẩm khỏi giỏ hàng thành công!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm trong giỏ hàng để xóa.");
+            // Nếu trạng thái = 0, tiến hành xóa
+            try (PreparedStatement deletePst = conn.prepareStatement(deleteSql)) {
+                deletePst.setString(1, maKhachHang);
+                deletePst.setString(2, maQuanAo);
+
+                int rowsAffected = deletePst.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "Xóa sản phẩm khỏi giỏ hàng thành công!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Xóa không thành công, vui lòng thử lại.");
+                }
             }
 
         } catch (Exception e) {

@@ -67,7 +67,7 @@ public class Giohang extends javax.swing.JPanel {
 
         String getMaKhachHangSQL = "SELECT MaKhachHang FROM khachhang WHERE MaTaiKhoan = ?";
         String loadGioHangSQL = "SELECT g.MaQuanAo, s.TenQuanAo, g.DonGiaBan, g.SoLuongDat, " +
-                                "(g.DonGiaBan * g.SoLuongDat) AS TongTien " +
+                                "(g.DonGiaBan * g.SoLuongDat) AS TongTien, g.TrangThai " +
                                 "FROM giohang g JOIN sanpham s ON g.MaQuanAo = s.MaQuanAo " +
                                 "WHERE g.MaKhachHang = ?";
 
@@ -90,15 +90,21 @@ public class Giohang extends javax.swing.JPanel {
                 pst2.setString(1, maKhachHang);
                 try (ResultSet rs = pst2.executeQuery()) {
                     DefaultTableModel model = new DefaultTableModel();
-                    model.setColumnIdentifiers(new String[]{"Mã Quần Áo", "Tên Quần Áo", "Đơn Giá Bán", "Số Lượng Đặt", "Tổng Tiền"});
+                    model.setColumnIdentifiers(new String[]{
+                        "Mã Quần Áo", "Tên Quần Áo", "Đơn Giá Bán", "Số Lượng Đặt", "Tổng Tiền", "Trạng Thái"
+                    });
 
                     while (rs.next()) {
+                        int trangThai = rs.getInt("TrangThai");
+                        String trangThaiText = (trangThai == 0) ? "Chưa đặt" : "Đã đặt";
+
                         Object[] row = new Object[]{
                             rs.getString("MaQuanAo"),
                             rs.getString("TenQuanAo"),
                             rs.getBigDecimal("DonGiaBan"),
                             rs.getInt("SoLuongDat"),
-                            rs.getBigDecimal("TongTien")
+                            rs.getBigDecimal("TongTien"),
+                            trangThaiText
                         };
                         model.addRow(row);
                     }
@@ -111,6 +117,7 @@ public class Giohang extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi khi tải giỏ hàng: " + ex.getMessage());
         }
     }
+
 
     private void hienThiChiTietSanPham(int row) {
         String maQuanAo = tblGiohang.getValueAt(row, 0).toString();

@@ -28,6 +28,14 @@ public class DatHangProcessor {
             // Xác nhận người dùng
             int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn đặt toàn bộ hàng trong giỏ?", "Xác nhận", JOptionPane.YES_NO_OPTION);
             if (confirm != JOptionPane.YES_OPTION) return false;
+            // Cập nhật trạng thái giỏ hàng sang "đã đặt" (TrangThai = 1)
+            
+            String updateTrangThaiQuery = "UPDATE GioHang SET TrangThai = 1 WHERE MaKhachHang = ?";
+            try (PreparedStatement updateCmd = conn.prepareStatement(updateTrangThaiQuery)) {
+                updateCmd.setString(1, maKhachHang);
+                updateCmd.executeUpdate();
+            }
+
 
             // Lấy email & tên khách
             String email = "", tenKhach = "";
@@ -96,7 +104,7 @@ public class DatHangProcessor {
             jakarta.mail.Session session = jakarta.mail.Session.getInstance(props, new jakarta.mail.Authenticator() {
                 @Override
                 protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
-                    return new jakarta.mail.PasswordAuthentication("binha10k56@gmail.com", "eadb mfdp bgdc qtdt");
+                    return new jakarta.mail.PasswordAuthentication("binha10k56@gmail.com", "");
                 }
             });
             Message message = new MimeMessage(session);

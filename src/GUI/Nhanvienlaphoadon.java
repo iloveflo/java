@@ -38,13 +38,20 @@ public class Nhanvienlaphoadon extends javax.swing.JPanel {
                     txtDongiaban.setText(tblLaphoadon.getValueAt(row, 2).toString());
                     txtSoluong.setText(tblLaphoadon.getValueAt(row, 3).toString());
                     txtTongtien.setText(tblLaphoadon.getValueAt(row, 4).toString());
+                }
 
-                    Object imgObj = tblLaphoadon.getValueAt(row, 5);
-                    if (imgObj instanceof ImageIcon) {
-                        showImageOnPanel((ImageIcon) imgObj);
-                    } else {
-                        clearImagePanel();
+                 // Lấy đường dẫn ảnh theo MaQuanAo từ DB
+                try (Connection conn = ketnoiCSDL.getConnection()) {
+                    String sql = "SELECT Anh FROM SanPham WHERE MaQuanAo = ?";
+                    PreparedStatement pst = conn.prepareStatement(sql);
+                    pst.setString(1, tblLaphoadon.getValueAt(row, 1).toString());
+                    ResultSet rs = pst.executeQuery();
+                    if (rs.next()) {
+                        String duongDanAnh = rs.getString("Anh");
+                        hienThiAnh(duongDanAnh);  // Gọi hàm hiện ảnh bạn đã có
                     }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Lỗi lấy ảnh sản phẩm: " + ex.getMessage());
                 }
             }
         });
@@ -90,37 +97,49 @@ public class Nhanvienlaphoadon extends javax.swing.JPanel {
         });
     }
 
-    private void showImageOnPanel(ImageIcon icon) {
-        Anh.removeAll(); // clear ảnh cũ
-
-        // Resize ảnh lớn hơn cho panel
-        Image img = icon.getImage().getScaledInstance(200, 270, Image.SCALE_SMOOTH);
-        JLabel lbl = new JLabel(new ImageIcon(img));
-
-        Anh.setLayout(new BorderLayout());
-        Anh.add(lbl, BorderLayout.CENTER);
-        Anh.revalidate();
-        Anh.repaint();
+    public void hienThiAnh(String duongDan) {
+        try {
+            // Đảm bảo đường dẫn hợp lệ (kiểm tra xem tệp có tồn tại không)
+            File file = new File(duongDan);
+            if (!file.exists()) {
+                JOptionPane.showMessageDialog(null, "Ảnh không tồn tại tại: " + duongDan);
+                return;
+            }
+    
+            // Tạo đối tượng ImageIcon từ đường dẫn ảnh
+            ImageIcon icon = new ImageIcon(duongDan);
+            // Tải ảnh và thay đổi kích thước phù hợp với JPanel (Anh)
+            Image img = icon.getImage().getScaledInstance(Anh.getWidth(), Anh.getHeight(), Image.SCALE_SMOOTH);
+    
+            // Tạo một JLabel chứa ảnh đã thay đổi kích thước
+            JLabel lbl = new JLabel(new ImageIcon(img));
+    
+            // Xóa hết nội dung cũ của JPanel trước khi thêm ảnh mới
+            Anh.removeAll();
+            Anh.setLayout(new BorderLayout()); // Đảm bảo layout hợp lý
+            Anh.add(lbl, BorderLayout.CENTER); // Thêm JLabel vào giữa JPanel
+    
+            // Cập nhật lại giao diện
+            Anh.revalidate();
+            Anh.repaint();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Không thể hiển thị ảnh: " + duongDan);
+        }
     }
 
-    private void clearImagePanel() {
-        Anh.removeAll();
-        Anh.repaint();
-    }
 
     public void loadDuLieuGioHang() {
-        String[] columnNames = {"Mã Khách hàng", "Mã Quần Áo", "Đơn Giá Bán", "Số Lượng Đặt", "Tổng Tiền", "Ảnh"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 5) return ImageIcon.class; // Cột Ảnh
-                return Object.class;
-            }
-        };
+    // Bỏ cột ảnh, chỉ còn 5 cột
+        String[] columnNames = {"Mã Khách hàng", "Mã Quần Áo", "Đơn Giá Bán", "Số Lượng Đặt", "Tổng Tiền"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         try (Connection conn = ketnoiCSDL.getConnection()) {
-            String sql = "SELECT g.MaKhachHang, g.MaQuanAo, g.DonGiaBan, g.SoLuongDat, g.TongTien, s.Anh " +
-                        "FROM GioHang g JOIN SanPham s ON g.MaQuanAo = s.MaQuanAo";
+            // Thêm điều kiện WHERE trạng thái = 1, và bỏ cột ảnh trong SELECT
+            String sql = "SELECT g.MaKhachHang, g.MaQuanAo, g.DonGiaBan, g.SoLuongDat, g.TongTien " +
+                        "FROM GioHang g " +
+                        "WHERE g.TrangThai = 1";  // Chỉ lấy sản phẩm trạng thái = 1
+
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
@@ -130,24 +149,13 @@ public class Nhanvienlaphoadon extends javax.swing.JPanel {
                 double donGia = rs.getDouble("DonGiaBan");
                 int soLuong = rs.getInt("SoLuongDat");
                 double tongTien = rs.getDouble("TongTien");
-                String tenFileAnh = rs.getString("Anh");
 
-                // Load ảnh từ thư mục, ví dụ: /images/
-                ImageIcon icon = null;
-                if (tenFileAnh != null) {
-                    File imgFile = new File(tenFileAnh); // bạn chỉnh lại đường dẫn theo dự án
-                    if (imgFile.exists()) {
-                        Image img = new ImageIcon(imgFile.getAbsolutePath()).getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-                        icon = new ImageIcon(img);
-                    }
-                }
-
-                Object[] row = {maKH, maQA, donGia, soLuong, tongTien, icon};
+                Object[] row = {maKH, maQA, donGia, soLuong, tongTien};
                 model.addRow(row);
             }
 
-            tblLaphoadon.setRowHeight(60); // Đặt chiều cao hàng phù hợp với ảnh
             tblLaphoadon.setModel(model);
+            tblLaphoadon.setRowHeight(20); // Bạn có thể chỉnh chiều cao hàng phù hợp
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Lỗi tải dữ liệu giỏ hàng: " + ex.getMessage());
