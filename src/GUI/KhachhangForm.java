@@ -57,6 +57,16 @@ public class KhachhangForm extends javax.swing.JFrame {
             dispose();
         });
 
+        btnHuongdandathang.addActionListener(e -> {
+            new Huongdandathang().setVisible(true);
+            dispose();
+        });
+
+        btnHuongdanchonsize.addActionListener(e -> {
+            new Huongdanchonsize().setVisible(true);
+            dispose();
+        });
+
         btnSanpham.addActionListener(e -> showPanel(new SanphamKH()));
         btnXemgiohang.addActionListener(e -> showPanel(new Giohang()));
         btnDathang.addActionListener(e -> {

@@ -2,7 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.oopjava;
+package GUI;
+
 
 /**
  *
@@ -15,6 +16,11 @@ public class Huongdanchonsize extends javax.swing.JFrame {
      */
     public Huongdanchonsize() {
         initComponents();
+
+        btnThoat.addActionListener(e -> {
+            new KhachhangForm().setVisible(true);
+            dispose();
+        });
     }
 
     /**
@@ -48,7 +54,7 @@ public class Huongdanchonsize extends javax.swing.JFrame {
 
         btnThoat.setText("Thoát");
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/sizeao.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("icons/sizeao.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
